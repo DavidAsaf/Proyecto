@@ -56,14 +56,32 @@ Articulo varchar(255),
 Modelo varchar(255),
 Marca varchar(255),
 Precio real,
+Cantidad int,
 Descripcion varchar(1024)
 );
 
-insert into academia.Articulos (Articulo, Modelo,Marca,Precio, Descripcion)
+insert into academia.Articulos (Articulo, Modelo,Marca,Precio,Cantidad, Descripcion)
 values
-('MICROFONO INALAMBRICO', 'BLX', 'SHURE',225.50, 'APTO PARA VOCES.'),
-('MICROFONO INALAMBRICO', 'PGX-D', 'SHURE', 299.99,'APTO PARA SOPRANOS.'),
-('MICROFONO INALAMBRICO DE OIDO', 'SLX', 'SHURE', 195.99,'APTO PARA CONDUCTOR DE EVENTO.'),
-('MICROFONO PARA VIOLIN', 'BETA 98H/C', 'SHURE', 150.99,'MICROFONO EN MINIATURA');
+('MICROFONO INALAMBRICO', 'BLX', 'SHURE',225.50, 4, 'APTO PARA VOCES.'),
+('MICROFONO INALAMBRICO', 'PGX-D', 'SHURE', 299.99, 3,'APTO PARA SOPRANOS.'),
+('MICROFONO INALAMBRICO DE OIDO', 'SLX', 'SHURE', 195.99,2,'APTO PARA CONDUCTOR DE EVENTO.'),
+('MICROFONO PARA VIOLIN', 'BETA 98H/C', 'SHURE',150.99,12,'MICROFONO EN MINIATURA');
 
 
+create table academia.Salida_Articulos(
+ReporteID int primary key auto_increment, 
+Lugar_Evento varchar(800),
+Fecha_Evento varchar(10)
+);
+
+insert into academia.Salida_Articulos(Lugar_Evento, Fecha_Evento)
+values
+('Prueba 8','12-10-2018'),
+('Prueba 5','12-10-2018');
+
+
+create table SalidaPorEvento (
+ReporteID int, foreign key (ReporteID) references academia.Salida_Articulos(ReporteID),
+ID_Articulo int, foreign key (ID_Articulo) references academia.Articulos(ID_Articulo),
+Cantidad int
+);
