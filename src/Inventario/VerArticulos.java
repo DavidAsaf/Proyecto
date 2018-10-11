@@ -67,7 +67,7 @@ public class VerArticulos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Articulo", "Modelo", "Marca", "Precio", "Descripción"
+                "ID", "Articulo", "Modelo", "Marca", "Precio", "Cantidad", "Descripción"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
