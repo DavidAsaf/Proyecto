@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JOptionPane;
 import modelo.conexion;
 
@@ -39,7 +41,7 @@ public class salidaEvento extends javax.swing.JFrame {
         verArticulos();
         model = (DefaultTableModel) tabla1.getModel();
         model2 = (DefaultTableModel) tabla2.getModel();
-        
+
     }
 
     public void setReporteID() {
@@ -62,7 +64,7 @@ public class salidaEvento extends javax.swing.JFrame {
                     }
                 }
             }
-
+            con.close();
         } catch (Exception e) {
 
         }
@@ -103,7 +105,7 @@ public class salidaEvento extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -125,14 +127,23 @@ public class salidaEvento extends javax.swing.JFrame {
         txtIDReporte = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        comboBuscar = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Buscar");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtBuscarActionPerformed(evt);
+            }
+        });
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyTyped(evt);
             }
         });
 
@@ -210,6 +221,11 @@ public class salidaEvento extends javax.swing.JFrame {
                 txtLugarEventoActionPerformed(evt);
             }
         });
+        txtLugarEvento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtLugarEventoKeyTyped(evt);
+            }
+        });
 
         txtFechaEvento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
 
@@ -223,18 +239,12 @@ public class salidaEvento extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel8.setText("Articulos disponibles");
 
+        comboBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Artículo" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addGap(58, 58, 58))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -242,17 +252,23 @@ public class salidaEvento extends javax.swing.JFrame {
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtIDReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtLugarEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(comboBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtIDReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtLugarEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtFechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,16 +293,24 @@ public class salidaEvento extends javax.swing.JFrame {
                 .addComponent(jButton4)
                 .addGap(54, 54, 54))
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addGap(58, 58, 58))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(157, 157, 157)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(282, 282, 282))
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7)
+                        .addGap(282, 282, 282))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,8 +331,9 @@ public class salidaEvento extends javax.swing.JFrame {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(comboBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -333,13 +358,17 @@ public class salidaEvento extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (txtArticulo.equals("")) {
+            JOptionPane.showMessageDialog(null, "Primero debes seleccionar un articulo.");
+
+        } else if (combo.getSelectedItem().equals("---Cantidad a retirar---")) {
+            JOptionPane.showMessageDialog(null, "No has seleccionado la cantidad a retirar.");
 
         } else {
             try {
@@ -362,7 +391,7 @@ public class salidaEvento extends javax.swing.JFrame {
 
     private int RetornoIdReporte() {
         Connection con = null;
-        int var=0;
+        int var = 0;
         try {
             con = (Connection) cn.getConexion();
             ps = con.prepareStatement("select max(reporteid) as id from salida_articulos;");
@@ -377,53 +406,60 @@ public class salidaEvento extends javax.swing.JFrame {
                     }
                 }
             }
-
+            con.close();
         } catch (Exception e) {
 
         }
         return var;
-        
+
     }
-    
+
     private void GuardarReporte() {
-        Connection con = null; 
-            try {
+        Connection con = null;
+        try {
 
-                con = (Connection) cn.getConexion();
+            con = (Connection) cn.getConexion();
 
-                ps = con.prepareStatement("insert into academia.Salida_Articulos (Lugar_Evento, Fecha_Evento) values (?,?)");
-                ps.setString(1, this.txtLugarEvento.getText());
-                ps.setString(2, this.txtFechaEvento.getText());
-                int res = ps.executeUpdate();
-                if (res > 0) {
-                    JOptionPane.showMessageDialog(null, "Reporte guardado satisfactoriamente.");
-                    
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al guardar artículo.");
-                }
+            ps = con.prepareStatement("insert into academia.Salida_Articulos (Lugar_Evento, Fecha_Evento) values (?,?)");
+            ps.setString(1, this.txtLugarEvento.getText());
+            ps.setString(2, this.txtFechaEvento.getText());
+            int res = ps.executeUpdate();
+            if (res > 0) {
 
-                con.close();
-            } catch (Exception e) {
-                System.err.println(e);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar artículo.");
             }
+
+            con.close();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
-    
-    
+
     private void GuardarSalida() {
-        Connection con = null; 
-        int cuentaFilas = model2.getRowCount(); 
+        Connection con = null;
+        int cuentaFilas = model2.getRowCount();
         if (cuentaFilas != 0) {
             try {
                 for (int i = 0; i < cuentaFilas; i++) {
                     try {
+                        int x0 = RetornoIdReporte();
                         int x1 = Integer.parseInt(String.valueOf(model2.getValueAt(i, 0)));
                         int x2 = Integer.parseInt(String.valueOf(model2.getValueAt(i, 2)));
+
                         con = (Connection) cn.getConexion();
-                        ps = con.prepareStatement("insert into academia.SalidaPorEvento (ReporteID, ID_Articulo,Cantidad) values (?,?,?)");
-                        ps.setInt(1, RetornoIdReporte());
-                        ps.setInt(2, x1);
-                        ps.setInt(3, x2);
+                        ps = con.prepareStatement("insert into academia.SalidaPorEvento(ReporteID,ID_Articulo,Cantidad) "
+                                + "values (" + x0 + "," + x1 + "," + x2 + ");");
+                        //ps.setInt(1, Integer.parseInt(String.valueOf(RetornoIdReporte())));
+                        //ps.setInt(2, Integer.parseInt(String.valueOf(x1)));
+                        //ps.setInt(3, Integer.parseInt(String.valueOf(x2)));
                         int res = ps.executeUpdate();
+
+                        if (res > 0) {
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al guardar.");
+                        }
                         con.close();
                     } catch (Exception exe) {
                         JOptionPane.showMessageDialog(null, "Hubo un error, guardar salida en el for. --- " + exe);
@@ -438,15 +474,15 @@ public class salidaEvento extends javax.swing.JFrame {
 
     private void DisminucionInventario() {
         Connection con = null;
-        int cuentaFilas = model.getRowCount(); 
+        int cuentaFilas = model.getRowCount();
         if (cuentaFilas != 0) {
             try {
                 for (int i = 0; i < cuentaFilas; i++) {
                     try {
                         con = (Connection) cn.getConexion();
-                        int idArt = Integer.parseInt(String.valueOf(model.getValueAt(i,0)));
-                        ps = con.prepareStatement("update academia.Articulos set Cantidad=? where ID_Articulo="+ idArt);
-                        ps.setInt(1, Integer.parseInt(String.valueOf(model.getValueAt(i,2))));
+                        int idArt = Integer.parseInt(String.valueOf(model.getValueAt(i, 0)));
+                        ps = con.prepareStatement("update academia.Articulos set Cantidad=? where ID_Articulo=" + idArt);
+                        ps.setInt(1, Integer.parseInt(String.valueOf(model.getValueAt(i, 2))));
                         int res = ps.executeUpdate();
                         con.close();
                     } catch (Exception exe) {
@@ -480,8 +516,13 @@ public class salidaEvento extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         GuardarReporte();
-        GuardarSalida(); DisminucionInventario();
+        GuardarSalida();
+        DisminucionInventario();
         JOptionPane.showMessageDialog(null, "Todo fue guardado con exito");
+        
+        MenuInventario MI = new MenuInventario();
+        MI.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtLugarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLugarEventoActionPerformed
@@ -490,17 +531,80 @@ public class salidaEvento extends javax.swing.JFrame {
 
     private void tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla1MouseClicked
         // TODO add your handling code here:
-        combo.removeAllItems();
-        combo.addItem("---Cantidad a retirar---");
-        idEspera = Integer.parseInt(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 0)));
-        txtArticulo.setText(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 1)));
         cantidad = Integer.parseInt(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 2)));
-        fila = tabla1.getSelectedRow();
-        for (int i = 0; i <= cantidad; i++) {
-            combo.addItem(String.valueOf(i));
+
+        if (cantidad != 0) {
+            combo.removeAllItems();
+            combo.addItem("---Cantidad a retirar---");
+            idEspera = Integer.parseInt(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 0)));
+            txtArticulo.setText(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 1)));
+
+            fila = tabla1.getSelectedRow();
+            for (int i = 1; i <= cantidad; i++) {
+                combo.addItem(String.valueOf(i));
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Este articulo está agotado temporalmente.");
         }
+
     }//GEN-LAST:event_tabla1MouseClicked
 
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+        // TODO add your handling code here:
+        Connection con = null;
+        String buscarPalabra = this.txtBuscar.getText();
+        String columna = String.valueOf(this.comboBuscar.getSelectedItem());
+        if (columna.equals("ID")) {
+            columna = "ID_Articulo";
+        }
+        if (columna.equals("Artículo")) {
+            columna = "Articulo";
+        }
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("select ID_Articulo, Articulo, Cantidad from academia.Articulos where " + columna + " like '%" + buscarPalabra + "%'");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tabla1.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[3];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 2) {
+
+                        model.addRow(Datos);
+                    }
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_txtBuscarKeyReleased
+
+    private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
+        // TODO add your handling code here:
+        convertirMayus(evt);
+    }//GEN-LAST:event_txtBuscarKeyTyped
+
+    private void txtLugarEventoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLugarEventoKeyTyped
+        // TODO add your handling code here:
+        convertirMayus(evt);
+    }//GEN-LAST:event_txtLugarEventoKeyTyped
+
+    public void convertirMayus(java.awt.event.KeyEvent evtC) {
+
+        char c = evtC.getKeyChar();
+        if (Character.isLowerCase(c)) {
+            String cad = ("" + c).toUpperCase();
+            c = cad.charAt(0);
+            evtC.setKeyChar(c);
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -538,6 +642,7 @@ public class salidaEvento extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> combo;
+    private javax.swing.JComboBox<String> comboBuscar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -553,10 +658,10 @@ public class salidaEvento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tabla1;
     private javax.swing.JTable tabla2;
     private javax.swing.JTextField txtArticulo;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JFormattedTextField txtFechaEvento;
     private javax.swing.JTextField txtIDReporte;
     private javax.swing.JTextField txtLugarEvento;

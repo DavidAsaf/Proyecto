@@ -239,7 +239,7 @@ public class VerArticulos extends javax.swing.JFrame {
                 }
 
             }
-
+            con.close();
         } catch (Exception e) {
 
         }
