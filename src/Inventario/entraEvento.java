@@ -43,7 +43,7 @@ public class entraEvento extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaSalida = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
@@ -51,14 +51,14 @@ public class entraEvento extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnSeleccionar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtSalida = new javax.swing.JTextField();
         comboSalida = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaSalida.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -66,7 +66,7 @@ public class entraEvento extends javax.swing.JFrame {
                 "ID artículo", "Artículo", "Cantidad Extraida"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaSalida);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -99,7 +99,13 @@ public class entraEvento extends javax.swing.JFrame {
 
         jButton1.setText("Agregar");
 
-        jButton5.setText("Seleccionar");
+        btnSeleccionar.setText("Seleccionar");
+        btnSeleccionar.setEnabled(false);
+        btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Codigo de Salida");
 
@@ -145,7 +151,7 @@ public class entraEvento extends javax.swing.JFrame {
                                 .addGap(32, 32, 32)
                                 .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnSeleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
                         .addComponent(jButton1)
@@ -164,7 +170,7 @@ public class entraEvento extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
+                    .addComponent(btnSeleccionar)
                     .addComponent(jLabel1)
                     .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -215,8 +221,9 @@ public class entraEvento extends javax.swing.JFrame {
     private void llenarTxt() {
         String varComprobar= String.valueOf(comboSalida.getSelectedItem());
         if (varComprobar=="--Seleccione código--") {
-            txtSalida.setText("");
+            txtSalida.setText(""); btnSeleccionar.setEnabled(false);
         } else {
+            btnSeleccionar.setEnabled(true);
             Connection con = null;
             try {
                 con = (Connection) cn.getConexion();
@@ -256,6 +263,38 @@ public class entraEvento extends javax.swing.JFrame {
         
     }//GEN-LAST:event_comboSalidaMouseClicked
 
+    private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
+        int var = Integer.parseInt(String.valueOf(comboSalida.getSelectedItem()));
+        llenarTablaSalida(var);
+        comboSalida.setEnabled(false); txtSalida.setEnabled(false); btnSeleccionar.setEnabled(false);
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
+
+    private void llenarTablaSalida(int variable){
+        Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("select SalidaPorEvento.ID_Articulo, Articulos.Articulo, SalidaPorEvento.Cantidad "
+                    + "from SalidaPorEvento inner join Articulos on Articulos.ID_Articulo=SalidaPorEvento.ID_Articulo "
+                    + "where SalidaPorEvento.ReporteID=" + variable + ";");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tablaSalida.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[4];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 2) {
+                        model.addRow(Datos);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -292,18 +331,18 @@ public class entraEvento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSeleccionar;
     private javax.swing.JComboBox<String> comboSalida;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable tablaSalida;
     private javax.swing.JTextField txtSalida;
     // End of variables declaration//GEN-END:variables
 }
