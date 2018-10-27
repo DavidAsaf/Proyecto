@@ -101,7 +101,7 @@ public class Rusuario extends javax.swing.JFrame {
         });
 
         jLabel7.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 2, 36)); // NOI18N
-        jLabel7.setText("Regisro de Usuarios");
+        jLabel7.setText("Registro de Usuarios");
 
         jButton1.setText("Menu Principal");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

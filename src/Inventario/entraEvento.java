@@ -5,17 +5,32 @@
  */
 package Inventario;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import modelo.conexion;
+
 /**
  *
- * @author Gerson Lopez
+ * @author Grupo_5
  */
 public class entraEvento extends javax.swing.JFrame {
+
+    DefaultTableModel model;
+    PreparedStatement ps;
+    ResultSet rs;
+
+    conexion cn = new conexion();
+    java.sql.Connection con = cn.getConexion();
 
     /**
      * Creates new form entraEvento
      */
     public entraEvento() {
         initComponents();
+        llenarCombo();
+
     }
 
     /**
@@ -27,7 +42,6 @@ public class entraEvento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -36,12 +50,13 @@ public class entraEvento extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtSalida = new javax.swing.JTextField();
+        comboSalida = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("Codigo de Salida");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -79,18 +94,35 @@ public class entraEvento extends javax.swing.JFrame {
 
         jButton4.setText("Imprimir y Guardar");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setText("Entrada Evento");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Seleccione una--", " " }));
-
         jButton1.setText("Agregar");
+
+        jButton5.setText("Seleccionar");
+
+        jLabel1.setText("Codigo de Salida");
+
+        txtSalida.setEditable(false);
+
+        comboSalida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Seleccione código--" }));
+        comboSalida.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboSalidaItemStateChanged(evt);
+            }
+        });
+        comboSalida.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboSalidaMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(187, Short.MAX_VALUE)
+                .addContainerGap(48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,17 +133,20 @@ public class entraEvento extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jButton3)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(57, 57, 57)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(195, 195, 195)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(115, 115, 115)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(208, 208, 208))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
                         .addComponent(jButton1)
                         .addGap(101, 101, 101)))
@@ -127,17 +162,16 @@ public class entraEvento extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(jButton1)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(108, 108, 108)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -154,9 +188,73 @@ public class entraEvento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void llenarCombo() {
+        Connection con = null;
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("select ReporteID from Academia.Salida_Articulos");
+            rs = ps.executeQuery();
+            Object Datos[] = new Object[1];
+            comboSalida.removeAllItems();
+            comboSalida.addItem("--Seleccione código--");
+            while (rs.next()) {
+                for (int i = 0; i < 1; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 0) {
+                        comboSalida.addItem(Datos[0].toString());
+                    }
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    private void llenarTxt() {
+        String varComprobar= String.valueOf(comboSalida.getSelectedItem());
+        if (varComprobar=="--Seleccione código--") {
+            txtSalida.setText("");
+        } else {
+            Connection con = null;
+            try {
+                con = (Connection) cn.getConexion();
+                int codigoCombo = Integer.parseInt(String.valueOf(comboSalida.getSelectedItem()));
+                ps = con.prepareStatement("select concat(Lugar_Evento,' - ', Fecha_Evento) from Academia.Salida_Articulos "
+                        + "where ReporteID=" + codigoCombo + ";");
+                rs = ps.executeQuery();
+                Object Datos[] = new Object[1];
+                txtSalida.setText("");
+                while (rs.next()) {
+                    for (int i = 0; i < 1; i++) {
+                        Datos[i] = (rs.getObject(i + 1));
+                        if (i == 0) {
+                            txtSalida.setText(Datos[0].toString());
+                        }
+                    }
+                }
+                con.close();
+            } catch (Exception e) {
+
+            }
+        }
+
+    }
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void comboSalidaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboSalidaItemStateChanged
+        // TODO add your handling code here:
+        llenarTxt();
+    }//GEN-LAST:event_comboSalidaItemStateChanged
+
+    private void comboSalidaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboSalidaMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_comboSalidaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -194,16 +292,18 @@ public class entraEvento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboSalida;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextField txtSalida;
     // End of variables declaration//GEN-END:variables
 }
