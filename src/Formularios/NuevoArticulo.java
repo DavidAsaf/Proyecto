@@ -84,6 +84,11 @@ public class NuevoArticulo extends javax.swing.JFrame {
         jLabel9.setText("Modelo:");
 
         txtIdArticulo.setEditable(false);
+        txtIdArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdArticuloActionPerformed(evt);
+            }
+        });
 
         txtArticulo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -306,6 +311,10 @@ public class NuevoArticulo extends javax.swing.JFrame {
         // TODO add your handling code here:
         convertirMayus(evt);
     }//GEN-LAST:event_txtDescripcionKeyTyped
+
+    private void txtIdArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdArticuloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdArticuloActionPerformed
 
     private void limpiar(){
         txtIdArticulo.setText("");
