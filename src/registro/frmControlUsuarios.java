@@ -6,6 +6,7 @@
 
 package registro;
 
+import Formularios.MainForm;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,8 @@ import modelo.conexion;
  * @author Amaya
  */
 public class frmControlUsuarios extends javax.swing.JFrame {
-    
+    String estadoBoton="";
+    int idUsuarioEditar=0;
     DefaultTableModel model;
     PreparedStatement ps;
     ResultSet rs;
@@ -107,11 +109,12 @@ public class frmControlUsuarios extends javax.swing.JFrame {
         btnGuardar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
-        txtContrasena = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         comboRoles = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
+        txtContrasena = new javax.swing.JPasswordField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,6 +147,11 @@ public class frmControlUsuarios extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -165,8 +173,6 @@ public class frmControlUsuarios extends javax.swing.JFrame {
 
         txtUsuario.setEnabled(false);
 
-        txtContrasena.setEnabled(false);
-
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Contraseña: ");
 
@@ -183,14 +189,19 @@ public class frmControlUsuarios extends javax.swing.JFrame {
             }
         });
 
+        txtContrasena.setEnabled(false);
+
+        jButton1.setText("Ir a Menú");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(230, 230, 230))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -205,9 +216,9 @@ public class frmControlUsuarios extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(comboRoles, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(comboRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(59, 59, 59)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -215,7 +226,9 @@ public class frmControlUsuarios extends javax.swing.JFrame {
                         .addGap(139, 139, 139))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -223,13 +236,20 @@ public class frmControlUsuarios extends javax.swing.JFrame {
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(288, 288, 288))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtContrasena, txtUsuario});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
+                .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -241,7 +261,9 @@ public class frmControlUsuarios extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,17 +275,19 @@ public class frmControlUsuarios extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(61, 61, 61)
                                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 15, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(comboRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                        .addContainerGap(38, Short.MAX_VALUE))))
+                        .addContainerGap(69, Short.MAX_VALUE))))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtContrasena, txtUsuario});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -277,6 +301,7 @@ public class frmControlUsuarios extends javax.swing.JFrame {
         // TODO add your handling code here:
         habilitarControles();
         llenarCombo(); 
+        estadoBoton="Nuevo";
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     
@@ -292,7 +317,7 @@ public class frmControlUsuarios extends javax.swing.JFrame {
     
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        deshabilitarControles();
+        deshabilitarControles(); estadoBoton="";
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     
@@ -304,17 +329,145 @@ public class frmControlUsuarios extends javax.swing.JFrame {
         btnNuevo.setEnabled(true); btnEditar.setEnabled(true); btnEliminar.setEnabled(true);
     }
     
+    private void AccionEditarUsuario() {
+        if (txtUsuario.getText().length()<5){
+            JOptionPane.showMessageDialog(null, "El usuario no puede tener menos de 5 caracteres. ");
+        } else if (txtContrasena.getText().length()<6){
+            JOptionPane.showMessageDialog(null, "La contraseña no puede tener menos de 6 caracteres. ");
+        } else if (comboRoles.getSelectedItem().toString().equals("--Seleccione Rol--")){
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado un rol. Seleccione un rol para guardar usuario.");
+        }else {
+            editarUsuario();
+        }
+    }
+    
+    private void editarUsuario(){
+        
+        Connection con = null;
+        try {
+
+            con = (Connection) cn.getConexion();
+
+            ps = con.prepareStatement("call EditarUsuario (?,?,?,?)");
+            ps.setInt(1, idUsuarioEditar);
+            ps.setString(2, this.txtUsuario.getText());
+            ps.setString(3, this.txtContrasena.getText());
+            ps.setString(4, this.comboRoles.getSelectedItem().toString());
+            int res = ps.executeUpdate();
+            
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Usuario actualizado con éxito.");
+                deshabilitarControles();
+                mostrarTabla();
+                idUsuarioEditar=0;
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
+            }
+
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e);
+        }
+        
+    }
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        crearUsuario(); 
-        
+        if (estadoBoton.equals("Nuevo")){
+            AccionCrearUsuario();
+        } else if (estadoBoton.equals("Editar")){
+            AccionEditarUsuario(); mostrarTabla();
+        }
+        estadoBoton="";
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void AccionCrearUsuario(){
+        if (txtUsuario.getText().length()<5){
+            JOptionPane.showMessageDialog(null, "El usuario no puede tener menos de 5 caracteres. ");
+        } else if (txtContrasena.getText().length()<6){
+            JOptionPane.showMessageDialog(null, "La contraseña no puede tener menos de 6 caracteres. ");
+        } else if (comboRoles.getSelectedItem().toString().equals("--Seleccione Rol--")){
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado un rol. Seleccione un rol para guardar usuario.");
+        }else {
+            crearUsuario(); 
+        }
+    }
+    
+    
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+        habilitarControles();
+        estadoBoton="Editar"; 
+        verificacionyLlenadoFila();
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        
+        try { 
+            int id = Integer.parseInt(model.getValueAt(tabla.getSelectedRow(), 0).toString());
+            if (JOptionPane.showConfirmDialog(rootPane, "Se eliminará el usuario, ¿desea continuar?",
+                "Eliminar Usuario", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                EliminarUsuario();
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Seleccione una fila para poder eliminar.");
+        }
+
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MainForm abrir = new MainForm();
+        abrir.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void EliminarUsuario() {
+        
+        try {
+            int id = Integer.parseInt(model.getValueAt(tabla.getSelectedRow(), 0).toString());
+
+            Connection con = null;
+
+            try {
+                con = (Connection) cn.getConexion();
+                ps = con.prepareStatement("call EliminarUsuario(" + id + ")");
+                ps.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "El usuario fue eliminado exitosamente.");
+                mostrarTabla();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error: " + e);
+            }
+        } catch (Exception exc) {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado una fila.");
+        }
+        
+    }
+    
+    private void verificacionyLlenadoFila(){
+        try {
+            idUsuarioEditar = Integer.parseInt(String.valueOf(model.getValueAt(tabla.getSelectedRow(), 0)));
+            String usuario = (String.valueOf(model.getValueAt(tabla.getSelectedRow(), 1)));
+            String contra = (String.valueOf(model.getValueAt(tabla.getSelectedRow(), 2)));
+            String rol = (String.valueOf(model.getValueAt(tabla.getSelectedRow(), 3)));
+            
+            this.txtUsuario.setText(usuario);
+            this.txtContrasena.setText(contra);
+            llenarCombo();
+            
+            try{
+                this.comboRoles.setSelectedItem(rol);
+            }catch (Exception exe){
+                JOptionPane.showMessageDialog(null, "Hubo un problema al fijar el rol");
+                this.comboRoles.setSelectedItem("--Seleccione Rol--");
+            }
+            
+            
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Para poder editar un usuario, es necesario seleccionar una fila.");
+        }
+    }
+    
     private void crearUsuario() {
         Connection con = null;
         try {
@@ -407,13 +560,14 @@ public class frmControlUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> comboRoles;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla;
-    private javax.swing.JTextField txtContrasena;
+    private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 

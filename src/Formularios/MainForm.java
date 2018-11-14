@@ -8,18 +8,18 @@ package Formularios;
 import Inventario.MenuInventario;
 import Alumnos.VerAlumnos;
 import modelo.usuarios;
-import registro.Rusuario;
+
 //prueba
 
 /**
  *
- * @author asafamaya
+ * @author grupo5
  */
 public class MainForm extends javax.swing.JFrame {
 
     usuarios mod;
 
-    public static Rusuario fmrReg;
+
 
     public MainForm() {
         initComponents();
@@ -76,11 +76,9 @@ public class MainForm extends javax.swing.JFrame {
         jMenu4.setText("Edit");
         jMenuBar2.add(jMenu4);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Gerson Lopez\\Desktop\\fondo-claro.jpg")); // NOI18N
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setPreferredSize(new java.awt.Dimension(1310, 903));
+        setPreferredSize(new java.awt.Dimension(1000, 650));
         setResizable(false);
         setSize(new java.awt.Dimension(1310, 903));
         getContentPane().setLayout(null);
@@ -93,7 +91,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(343, 261, 196, 102);
+        jButton1.setBounds(220, 140, 196, 102);
 
         jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton2.setText("Alumnos");
@@ -103,7 +101,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(651, 261, 196, 102);
+        jButton2.setBounds(530, 140, 196, 102);
 
         jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton3.setText("Maestros");
@@ -113,17 +111,17 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3);
-        jButton3.setBounds(343, 392, 196, 102);
+        jButton3.setBounds(220, 270, 196, 102);
 
         jButton4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton4.setText("Clases");
         getContentPane().add(jButton4);
-        jButton4.setBounds(651, 392, 196, 102);
+        jButton4.setBounds(530, 270, 196, 102);
 
-        jLabel1.setFont(new java.awt.Font("Chilanka", 0, 48)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Chilanka", 0, 36)); // NOI18N
         jLabel1.setText("Menú Principal");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(416, 100, 344, 52);
+        jLabel1.setBounds(320, 30, 344, 52);
 
         jButton5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jButton5.setText("Salir");
@@ -133,7 +131,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5);
-        jButton5.setBounds(1017, 708, 100, 49);
+        jButton5.setBounds(620, 550, 100, 49);
 
         jButton6.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton6.setText("Inventario");
@@ -143,7 +141,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton6);
-        jButton6.setBounds(343, 523, 196, 102);
+        jButton6.setBounds(220, 400, 196, 102);
 
         jButton7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton7.setText("Cobros");
@@ -153,7 +151,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton7);
-        jButton7.setBounds(651, 523, 196, 102);
+        jButton7.setBounds(530, 400, 196, 102);
 
         lblNombre.setText("Nombre");
         getContentPane().add(lblNombre);
@@ -230,12 +228,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void subRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subRegistroActionPerformed
-        if (fmrReg == null) {
-            fmrReg = new Rusuario();
-            fmrReg.setVisible(true);
-
-        }
-        this.dispose();
+        
     }//GEN-LAST:event_subRegistroActionPerformed
 
     private void subRegistro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subRegistro1ActionPerformed

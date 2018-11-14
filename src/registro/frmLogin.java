@@ -17,7 +17,7 @@ import modelo.conexion;
  * @author Amaya
  */
 public class frmLogin extends javax.swing.JFrame {
-    
+    public static String varCompartir = "";
     PreparedStatement ps;
     ResultSet rs;
 
@@ -151,6 +151,7 @@ public class frmLogin extends javax.swing.JFrame {
         }
         
         if (darPaso1=true && darPaso2==true) {
+            varCompartir = datoUsuario;
             MainForm abrir = new MainForm();
             abrir.setVisible(true);
             this.dispose();
