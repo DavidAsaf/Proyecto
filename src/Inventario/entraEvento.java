@@ -8,6 +8,9 @@ package Inventario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.conexion;
 
@@ -18,11 +21,19 @@ import modelo.conexion;
 public class entraEvento extends javax.swing.JFrame {
 
     DefaultTableModel model;
+    DefaultTableModel model2;
     PreparedStatement ps;
     ResultSet rs;
+    PreparedStatement ps2;
+    ResultSet rs2;
 
     conexion cn = new conexion();
     java.sql.Connection con = cn.getConexion();
+    conexion cn2 = new conexion();
+    java.sql.Connection con2 = cn2.getConexion();
+
+    int idEspera = 0, columna = 0, fila = 0;
+    int cantidad = 0;
 
     /**
      * Creates new form entraEvento
@@ -30,7 +41,8 @@ public class entraEvento extends javax.swing.JFrame {
     public entraEvento() {
         initComponents();
         llenarCombo();
-
+        model = (DefaultTableModel) tabla1.getModel();
+        model2 = (DefaultTableModel) tabla2.getModel();
     }
 
     /**
@@ -43,23 +55,29 @@ public class entraEvento extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaSalida = new javax.swing.JTable();
+        tabla1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabla2 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         btnSeleccionar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtSalida = new javax.swing.JTextField();
         comboSalida = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtArticulo = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        combo = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tablaSalida.setModel(new javax.swing.table.DefaultTableModel(
+        tabla1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -67,9 +85,14 @@ public class entraEvento extends javax.swing.JFrame {
                 "ID artículo", "Artículo", "Cantidad Extraida"
             }
         ));
-        jScrollPane1.setViewportView(tablaSalida);
+        tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabla1);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabla2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -77,7 +100,7 @@ public class entraEvento extends javax.swing.JFrame {
                 "Id artículo", "Artículo", "Cantidad de Entrada"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tabla2);
 
         jButton2.setText("Quitar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -86,10 +109,11 @@ public class entraEvento extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Guardar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(0, 153, 0));
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
 
@@ -97,8 +121,6 @@ public class entraEvento extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setText("Entrada Evento");
-
-        jButton1.setText("Agregar");
 
         btnSeleccionar.setText("Seleccionar");
         btnSeleccionar.setEnabled(false);
@@ -125,82 +147,149 @@ public class entraEvento extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel3.setText("Artículos ");
+        jLabel3.setText("Artículos que salieron");
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel4.setText("Artículos que entran");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Seleccione fila");
+
+        jLabel6.setText("Artículo");
+
+        combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---Cantidad a devolver---" }));
+
+        jButton1.setText("Agregar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jButton2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButton3)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(115, 115, 115)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(208, 208, 208))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(47, 47, 47)
+                                .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(32, 32, 32)
-                                        .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(31, 31, 31)
-                                .addComponent(btnSeleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(27, 27, 27)
-                        .addComponent(jButton1)
-                        .addGap(101, 101, 101)))
-                .addComponent(jButton4)
-                .addContainerGap())
+                                .addGap(186, 186, 186)
+                                .addComponent(jButton1)))
+                        .addGap(162, 162, 162)
+                        .addComponent(btnGuardar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)))
+                .addGap(27, 27, 27)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(175, 175, 175)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(343, 343, 343)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(266, 266, 266))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(234, 234, 234)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(btnSeleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane1, jScrollPane2});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSeleccionar)
                     .addComponent(jLabel1)
                     .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(108, 108, 108)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar))
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
-                .addGap(8, 8, 8))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(94, 94, 94)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton4)
+                            .addComponent(btnGuardar))
+                        .addContainerGap(23, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(36, 36, 36))))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jScrollPane1, jScrollPane2});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            idEspera = Integer.parseInt(String.valueOf(model2.getValueAt(tabla2.getSelectedRow(), 0)));
+            int obtenerCant = Integer.parseInt(String.valueOf(model.getValueAt(idEspera - 1, 2)));
+            cantidad = Integer.parseInt(String.valueOf(model2.getValueAt(tabla2.getSelectedRow(), 2)));
+            cantidad = cantidad + obtenerCant;
+            model.setValueAt(cantidad, idEspera - 1, 2);
+            idEspera = 0;
+            cantidad = 0;
+            model2.removeRow(tabla2.getSelectedRow());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Tienes que seleccionar una fila.");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     public void llenarCombo() {
@@ -228,9 +317,10 @@ public class entraEvento extends javax.swing.JFrame {
     }
 
     private void llenarTxt() {
-        String varComprobar= String.valueOf(comboSalida.getSelectedItem());
-        if (varComprobar=="--Seleccione código--") {
-            txtSalida.setText(""); btnSeleccionar.setEnabled(false);
+        String varComprobar = String.valueOf(comboSalida.getSelectedItem());
+        if (varComprobar == "--Seleccione código--") {
+            txtSalida.setText("");
+            btnSeleccionar.setEnabled(false);
         } else {
             btnSeleccionar.setEnabled(true);
             Connection con = null;
@@ -258,9 +348,24 @@ public class entraEvento extends javax.swing.JFrame {
 
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        GuardarEnt();
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void GuardarEnt() {
+        try {
+            GuardarReporte();
+            GuardarEntrada();
+            AumentarInventario();
+            JOptionPane.showMessageDialog(null, "Todo fue guardado con exito");
+
+            MenuInventario MI = new MenuInventario();
+            MI.setVisible(true);
+            this.dispose();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Hubo error al guardar.");
+        }
+    }
 
     private void comboSalidaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboSalidaItemStateChanged
         // TODO add your handling code here:
@@ -269,16 +374,188 @@ public class entraEvento extends javax.swing.JFrame {
 
     private void comboSalidaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboSalidaMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_comboSalidaMouseClicked
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         int var = Integer.parseInt(String.valueOf(comboSalida.getSelectedItem()));
         llenarTablaSalida(var);
-        comboSalida.setEnabled(false); txtSalida.setEnabled(false); btnSeleccionar.setEnabled(false);
+        comboSalida.setEnabled(false);
+        txtSalida.setEnabled(false);
+        btnSeleccionar.setEnabled(false);
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
-    private void llenarTablaSalida(int variable){
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (txtArticulo.equals("")) {
+            JOptionPane.showMessageDialog(null, "Primero debes seleccionar un articulo.");
+
+        } else if (combo.getSelectedItem().equals("---Cantidad a devolver---")) {
+            JOptionPane.showMessageDialog(null, "No has seleccionado la cantidad a retirar.");
+
+        } else {
+            try {
+                Object[] registro = {String.valueOf(idEspera), txtArticulo.getText(), combo.getSelectedItem()};
+                model2.addRow(registro);
+                cantidad = cantidad - Integer.parseInt(String.valueOf(combo.getSelectedItem()));
+                model.setValueAt(cantidad, fila, 2);
+                idEspera = 0;
+                fila = 0;
+                cantidad = 0;
+                txtArticulo.setText("");
+                combo.removeAllItems();
+                combo.addItem("---Cantidad a devolver---");
+            } catch (Exception ex) {
+
+            }
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla1MouseClicked
+        cantidad = Integer.parseInt(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 2)));
+
+        if (cantidad != 0) {
+            combo.removeAllItems();
+            combo.addItem("---Cantidad a devolver---");
+            idEspera = Integer.parseInt(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 0)));
+            txtArticulo.setText(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 1)));
+
+            fila = tabla1.getSelectedRow();
+            for (int i = 1; i <= cantidad; i++) {
+                combo.addItem(String.valueOf(i));
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Este articulo está agotado temporalmente.");
+        }
+    }//GEN-LAST:event_tabla1MouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        comboSalida.setEnabled(true);
+        txtSalida.setEnabled(true);
+        btnSeleccionar.setEnabled(true);
+        model = (DefaultTableModel) this.tabla1.getModel();
+        model.setRowCount(0);
+        model2 = (DefaultTableModel) this.tabla2.getModel();
+        model2.setRowCount(0);
+
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private int CantidadProducto(int idProd) {
+        Connection con2 = null;
+        int cantidad = 0;
+        try {
+            con2 = (Connection) cn2.getConexion();
+            ps2 = con2.prepareStatement("call ConsultarCantidadProducto (" + idProd + ");");
+            rs2 = ps2.executeQuery();
+
+            Object Datos[] = new Object[1];
+
+            while (rs2.next()) {
+                for (int i = 0; i < 1; i++) {
+                    Datos[i] = (rs2.getObject(i + 1));
+
+                    if (i == 0) {
+                        cantidad = Integer.parseInt((Datos[0].toString()));
+                    }
+                }
+            }
+            con2.close(); 
+        } catch (Exception e) {
+
+        }
+        return cantidad; 
+    }
+
+    private void AumentarInventario() {
+        Connection con = null;
+        int cuentaFilas = model2.getRowCount();
+        if (cuentaFilas != 0) {
+            try {
+                for (int i = 0; i < cuentaFilas; i++) {
+                    int cantDev = Integer.parseInt(String.valueOf(model2.getValueAt(i, 2)));
+                    try {
+                        int idArt = Integer.parseInt(String.valueOf(model2.getValueAt(i, 0)));
+                        int cantEnviar = CantidadProducto(idArt) + cantDev;
+                        con = (Connection) cn.getConexion();
+                        ps = con.prepareStatement("call AumentarInventario (?,?)");
+                        ps.setInt(1, cantEnviar);
+                        ps.setInt(2, idArt);
+                        int res = ps.executeUpdate();
+                        con.close(); cn.getConexion().close();
+                    } catch (Exception exe) {
+                        JOptionPane.showMessageDialog(null, "Hubo un error en el for de el aumento de inventario.");
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error en el aumento de inventario.");
+            }
+        }
+    }
+
+    private void GuardarEntrada() {
+        Connection con = null;
+        int cuentaFilas = model2.getRowCount();
+        if (cuentaFilas != 0) {
+            try {
+                for (int i = 0; i < cuentaFilas; i++) {
+                    try {
+                        int x0 = Integer.parseInt(String.valueOf(comboSalida.getSelectedItem()));
+                        int x1 = Integer.parseInt(String.valueOf(model2.getValueAt(i, 0)));
+                        int x2 = Integer.parseInt(String.valueOf(model2.getValueAt(i, 2)));
+
+                        con = (Connection) cn.getConexion();
+                        ps = con.prepareStatement("call EntradaXEvento (" + x0 + "," + x1 + "," + x2 + ");");
+                        //ps.setInt(1, Integer.parseInt(String.valueOf(RetornoIdReporte())));
+                        //ps.setInt(2, Integer.parseInt(String.valueOf(x1)));
+                        //ps.setInt(3, Integer.parseInt(String.valueOf(x2)));
+                        int res = ps.executeUpdate();
+
+                        if (res > 0) {
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al guardar.");
+                        }
+                        con.close();
+                    } catch (Exception exe) {
+                        JOptionPane.showMessageDialog(null, "Hubo un error, guardar entrada en el for. --- " + exe);
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Hubo un error en guardar entrada.");
+            }
+        }
+
+    }
+
+    private void GuardarReporte() {
+        Connection con = null;
+        try {
+            Calendar c = new GregorianCalendar();
+            int annio = (c.get(Calendar.YEAR));
+            int mes = c.get(Calendar.MONTH);
+            int dia = c.get(Calendar.DAY_OF_MONTH);
+            String fecha = String.valueOf(dia) + "/" + String.valueOf(mes) + "/" + String.valueOf(annio);
+
+            con = (Connection) cn.getConexion();
+
+            ps = con.prepareStatement("call EntradaArticulos (?,?)");
+            ps.setInt(1, Integer.parseInt(String.valueOf(comboSalida.getSelectedItem())));
+            ps.setString(2, fecha);
+            int res = ps.executeUpdate();
+            if (res > 0) {
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar artículo.");
+            }
+
+            con.close();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
+    private void llenarTablaSalida(int variable) {
         Connection con = null;
 
         try {
@@ -287,7 +564,7 @@ public class entraEvento extends javax.swing.JFrame {
                     + "from SalidaPorEvento inner join Articulos on Articulos.ID_Articulo=SalidaPorEvento.ID_Articulo "
                     + "where SalidaPorEvento.ReporteID=" + variable + ";");
             rs = ps.executeQuery();
-            model = (DefaultTableModel) this.tablaSalida.getModel();
+            model = (DefaultTableModel) this.tabla1.getModel();
             model.setRowCount(0);
             Object Datos[] = new Object[4];
 
@@ -304,6 +581,7 @@ public class entraEvento extends javax.swing.JFrame {
 
         }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -340,19 +618,25 @@ public class entraEvento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnSeleccionar;
+    private javax.swing.JComboBox<String> combo;
     private javax.swing.JComboBox<String> comboSalida;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable tablaSalida;
+    private javax.swing.JTable tabla1;
+    private javax.swing.JTable tabla2;
+    private javax.swing.JTextField txtArticulo;
     private javax.swing.JTextField txtSalida;
     // End of variables declaration//GEN-END:variables
 }
