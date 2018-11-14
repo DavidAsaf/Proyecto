@@ -76,10 +76,9 @@ public class MainForm extends javax.swing.JFrame {
         jMenu4.setText("Edit");
         jMenuBar2.add(jMenu4);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Gerson Lopez\\Desktop\\fondo-claro.jpg")); // NOI18N
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        setMaximumSize(new java.awt.Dimension(700, 700));
         setPreferredSize(new java.awt.Dimension(1310, 903));
         setResizable(false);
         setSize(new java.awt.Dimension(1310, 903));
@@ -93,7 +92,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(343, 261, 196, 102);
+        jButton1.setBounds(130, 110, 196, 102);
 
         jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton2.setText("Alumnos");
@@ -103,7 +102,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(651, 261, 196, 102);
+        jButton2.setBounds(430, 110, 196, 102);
 
         jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton3.setText("Maestros");
@@ -113,17 +112,17 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3);
-        jButton3.setBounds(343, 392, 196, 102);
+        jButton3.setBounds(130, 240, 196, 102);
 
         jButton4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton4.setText("Clases");
         getContentPane().add(jButton4);
-        jButton4.setBounds(651, 392, 196, 102);
+        jButton4.setBounds(430, 240, 196, 102);
 
         jLabel1.setFont(new java.awt.Font("Chilanka", 0, 48)); // NOI18N
         jLabel1.setText("Menú Principal");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(416, 100, 344, 52);
+        jLabel1.setBounds(200, 20, 344, 52);
 
         jButton5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jButton5.setText("Salir");
@@ -133,7 +132,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5);
-        jButton5.setBounds(1017, 708, 100, 49);
+        jButton5.setBounds(310, 570, 100, 49);
 
         jButton6.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton6.setText("Inventario");
@@ -143,7 +142,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton6);
-        jButton6.setBounds(343, 523, 196, 102);
+        jButton6.setBounds(130, 370, 196, 102);
 
         jButton7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton7.setText("Cobros");
@@ -153,15 +152,15 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton7);
-        jButton7.setBounds(651, 523, 196, 102);
+        jButton7.setBounds(430, 370, 196, 102);
 
         lblNombre.setText("Nombre");
         getContentPane().add(lblNombre);
-        lblNombre.setBounds(932, 0, 93, 75);
+        lblNombre.setBounds(570, 10, 93, 75);
 
         lblRol.setText("Cargo");
         getContentPane().add(lblRol);
-        lblRol.setBounds(1067, 0, 118, 75);
+        lblRol.setBounds(640, 10, 118, 75);
 
         menuUsuario.setText("Usuario");
         jMenuBar3.add(menuUsuario);
@@ -214,7 +213,9 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+         Inscripciones.Inscripcion agregar = new Inscripciones.Inscripcion();
+        agregar.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
