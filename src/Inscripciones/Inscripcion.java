@@ -5,17 +5,47 @@
  */
 package Inscripciones;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelo.conexion;
+import java.util.HashMap;
+import java.util.Map;
+        
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author Jose
  */
 public class Inscripcion extends javax.swing.JFrame {
-
+    DefaultTableModel model;
+     DefaultTableModel model2;
+    PreparedStatement ps;
+    ResultSet rs;
+    conexion cn = new conexion();
+    java.sql.Connection con = cn.getConexion();
+    
+    int variable=0;
+    int variable2=0;
+    
     /**
      * Creates new form Inscripcion
      */
     public Inscripcion() {
         initComponents();
+        CargarCursos(cmbCursos);
+        MostrarInscripciones();
+        CargarTodasSecciones(cmbSecciones1);
+       // CargarSecciones(cmbSecciones);
     }
 
     /**
@@ -29,162 +59,715 @@ public class Inscripcion extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblInscripciones = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbCursos = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cmbSecciones = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnInscribir = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnMenuPrincipal = new javax.swing.JButton();
+        btnGenerarReporte = new javax.swing.JButton();
+        btnCursos = new javax.swing.JButton();
+        btnHorarios = new javax.swing.JButton();
+        lblMensaje = new javax.swing.JLabel();
+        lblBuscarPor = new javax.swing.JLabel();
+        combo1 = new javax.swing.JComboBox<>();
+        txtBuscar = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblAlumnos = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblHorarioSeccion = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        cmbSecciones1 = new javax.swing.JComboBox<>();
+        Secciones = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Alumno");
+        jLabel1.setText("Seleccione el Alumno");
 
         jLabel2.setText("Curso");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblInscripciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Alumno", "Curso", "Sección", "Horario"
+                "Nombre", "Apellido", "Sección", "Curso", "Nivel"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblInscripciones);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setText("Inscripcion");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Piano", "Guitarra", "Bateria" }));
-
-        jLabel4.setText("Secciones");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"A\"", "\"B\"", "\"C\"" }));
-
-        jLabel5.setText("Dias");
-
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        cmbCursos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                cmbCursosActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("Horario");
+        jLabel4.setText("Secciones");
 
-        jButton1.setText("Inscribir");
+        cmbSecciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        cmbSecciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbSeccionesMouseClicked(evt);
+            }
+        });
+        cmbSecciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSeccionesActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Horario");
+
+        btnInscribir.setText("Inscribir");
+        btnInscribir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInscribirActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
 
-        jButton3.setText("Imprimir");
+        btnMenuPrincipal.setText("Menú Principal");
+        btnMenuPrincipal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuPrincipalActionPerformed(evt);
+            }
+        });
+
+        btnGenerarReporte.setText("Reporte");
+        btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarReporteActionPerformed(evt);
+            }
+        });
+
+        btnCursos.setText("Cursos");
+        btnCursos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCursosActionPerformed(evt);
+            }
+        });
+
+        btnHorarios.setText("Horarios");
+        btnHorarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHorariosActionPerformed(evt);
+            }
+        });
+
+        lblBuscarPor.setText("Bucar por:");
+
+        combo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id", "Nombre", "Apellido", " " }));
+
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyTyped(evt);
+            }
+        });
+
+        tblAlumnos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nombre", "Apellido"
+            }
+        ));
+        jScrollPane2.setViewportView(tblAlumnos);
+
+        tblHorarioSeccion.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Dia", "Hora Inicio", "Hora Fin"
+            }
+        ));
+        tblHorarioSeccion.setEnabled(false);
+        jScrollPane3.setViewportView(tblHorarioSeccion);
+
+        jLabel6.setText("Inscripciones");
+
+        jLabel7.setText("Generar Reporte de Inscripciones por Seccion");
+
+        cmbSecciones1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        cmbSecciones1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbSecciones1MouseClicked(evt);
+            }
+        });
+        cmbSecciones1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSecciones1ActionPerformed(evt);
+            }
+        });
+
+        Secciones.setText("Secciones");
+        Secciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SeccionesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel5))
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 165, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField3))
-                            .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6))
-                                .addGap(23, 23, 23)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jButton2)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(218, 218, 218)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(156, 156, 156))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(355, 355, 355)))
+                        .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(216, 216, 216)
-                        .addComponent(jButton3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addContainerGap(942, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(lblBuscarPor)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(combo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(cmbCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(67, 67, 67)
+                                                    .addComponent(jLabel4))
+                                                .addComponent(jLabel2))
+                                            .addGap(23, 23, 23)
+                                            .addComponent(cmbSecciones, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(81, 81, 81)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jButton2)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addGap(99, 99, 99)
+                                                    .addComponent(jLabel5))
+                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(37, 37, 37)
+                                        .addComponent(btnInscribir)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cmbSecciones1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(39, 39, 39)
+                                        .addComponent(btnGenerarReporte))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnMenuPrincipal)
+                                .addGap(33, 33, 33)
+                                .addComponent(btnCursos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnHorarios)
+                                .addGap(18, 18, 18)
+                                .addComponent(Secciones)
+                                .addGap(291, 291, 291)))
+                        .addGap(104, 104, 104))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(43, 43, 43)
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(lblBuscarPor)
+                                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(combo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel2)
+                                        .addComponent(cmbCursos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel4)
+                                        .addComponent(cmbSecciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnInscribir)
+                                    .addComponent(jButton2)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnGenerarReporte))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel7)
+                            .addComponent(cmbSecciones1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(27, Short.MAX_VALUE))
+                    .addComponent(btnMenuPrincipal)
+                    .addComponent(btnCursos)
+                    .addComponent(btnHorarios)
+                    .addComponent(Secciones))
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    private void btnMenuPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPrincipalActionPerformed
+            Formularios.MainForm agregar = new Formularios.MainForm();
+            agregar.setVisible(true);
+            this.dispose();
+        
+    }//GEN-LAST:event_btnMenuPrincipalActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    private void btnCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCursosActionPerformed
+            Cursos agregar = new Cursos();
+             agregar.setVisible(true);
+             
+    }//GEN-LAST:event_btnCursosActionPerformed
 
+    private void btnHorariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHorariosActionPerformed
+            Horarios agregar = new Horarios();
+            agregar.setVisible(true);
+            
+    }//GEN-LAST:event_btnHorariosActionPerformed
+
+    private void cmbCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCursosActionPerformed
+       ObtenerCursoSeleccionado();
+       CargarSecciones(cmbSecciones);
+      
+    }//GEN-LAST:event_cmbCursosActionPerformed
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+        // TODO add your handling code here:
+        Connection con = null;
+        String buscarPalabra = this.txtBuscar.getText();
+        String columna = String.valueOf(this.combo1.getSelectedItem());
+        if (columna.equals("Id")) {
+            columna = "id_alumno";
+        }
+        if (columna.equals("Nombre")) {
+            columna = "nombre";
+        }
+        if (columna.equals("Apellido")) {
+            columna = "apellido";
+        }
+       
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT id_alumno, nombre, apellido FROM alumnos WHERE " + columna + " like '" + buscarPalabra + "%'");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tblAlumnos.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[4];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 2) {
+
+                        Object[] registro = {String.valueOf(Datos[0]), String.valueOf(Datos[1]),
+                            String.valueOf(Datos[2])};
+                        model.addRow(registro);
+                    }
+
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_txtBuscarKeyReleased
+
+    private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
+
+    }//GEN-LAST:event_txtBuscarKeyTyped
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
+
+    private void cmbSeccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSeccionesActionPerformed
+         ObtenerSeccionSeleccionada();
+         ObtenerIDSeccion();
+    }//GEN-LAST:event_cmbSeccionesActionPerformed
+
+    private void cmbSeccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbSeccionesMouseClicked
+      
+    }//GEN-LAST:event_cmbSeccionesMouseClicked
+
+    private void btnInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscribirActionPerformed
+        
+        Inscribir();
+        
+        
+    }//GEN-LAST:event_btnInscribirActionPerformed
+
+    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
+     CallReport ir = new CallReport();
+     
+     ir.abrirReporte("Reportes/Alumnos.jrxml");
+       
+    }//GEN-LAST:event_btnGenerarReporteActionPerformed
+
+    private void cmbSecciones1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbSecciones1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSecciones1MouseClicked
+
+    private void cmbSecciones1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSecciones1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSecciones1ActionPerformed
+
+    private void SeccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeccionesActionPerformed
+            Secciones agregar = new Secciones();
+            agregar.setVisible(true);
+    }//GEN-LAST:event_SeccionesActionPerformed
+    
+    //metodo para llenar abrir el reporte
+    public final class CallReport {
+    public void abrirReporte(String ruta_archivo){
+    
+           try {
+               JasperReport report= JasperCompileManager.compileReport(ruta_archivo);
+               JasperPrint print = JasperFillManager.fillReport(report, new HashMap());
+               JasperViewer.viewReport(print, false);
+           }catch (JRException jRException){
+            System.err.println(jRException.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al abrir el reporte");
+           }
+    
+    } 
+            
+            
+    }
+
+    
+    private void MostrarInscripciones(){
+          Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT alumnos.`nombre`, alumnos.`apellido`, secciones.`seccion`, cursos.`curso`, niveles.`nivel`\n" +
+                                        "FROM alumnos \n" +
+                                        "INNER JOIN inscripciones\n" +
+                                        "INNER JOIN secciones\n" +
+                                        "INNER JOIN cursos\n" +
+                                        "INNER JOIN niveles\n" +
+                                        "ON alumnos.`id_alumno`=inscripciones.`id_alumno`\n" +
+                                        "AND inscripciones.`id_seccion`=secciones.`id_seccion`\n" +
+                                        "AND secciones.`id_curso`= cursos.`id_curso`\n" +
+                                        "AND cursos.`id_curso`=niveles.`id_nivel`\n" +
+                                        "WHERE alumnos.`id_alumno`=inscripciones.`id_alumno`\n" +
+                                        "ORDER BY alumnos.`apellido`");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tblInscripciones.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[7];
+
+            while (rs.next()) {
+                for (int i = 0; i < 5; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 4) {
+                        model.addRow(Datos);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+    
+    }
+    
+   private void Inscribir(){
+       String seleccionAlumno=String.valueOf(model.getValueAt(tblAlumnos.getSelectedRow(), 0));
+       Connection con = null;
+       try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("INSERT INTO inscripciones (id_alumno,id_seccion)VALUES(?,?)");
+                ps.setString(1, String.valueOf((seleccionAlumno)));
+                ps.setString(2, String.valueOf((variable2)));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "Inscripcion realizada con exito");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar inscripcion");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        
+   }
+    public void CargarCursos(JComboBox cmbCursos){
+       
+        Connection con = null;
+       try{
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("Select * from cursos");     
+            ResultSet rs =ps.executeQuery();
+           
+           //llenar el combobox
+           cmbCursos.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbCursos.addItem(rs.getString("curso"));
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (con!=null){
+                try {
+                    con.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    
+    private void CargarSecciones(JComboBox cmbSecciones){
+        cmbSecciones.removeAllItems();
+        Connection con = null;
+       try{
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT seccion FROM secciones WHERE secciones.`id_curso`='"+variable+"' order by secciones.id_seccion");     
+            ResultSet rs =ps.executeQuery();
+           
+           //llenar el combobox
+           cmbSecciones.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbSecciones.addItem(rs.getString("seccion"));
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (con!=null){
+                try {
+                    con.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    
+    }
+    
+    private void CargarTodasSecciones(JComboBox cmbSecciones1){
+        //cmbSecciones1.removeAllItems();
+        Connection con = null;
+       try{
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT seccion FROM secciones order by secciones.id_seccion");     
+            ResultSet rs =ps.executeQuery();
+           
+           //llenar el combobox
+           cmbSecciones1.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbSecciones1.addItem(rs.getString("seccion"));
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (con!=null){
+                try {
+                    con.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    
+    }
+    
+    
+    private void ObtenerCursoSeleccionado(){
+        Connection con = null;
+        
+                  String seleccion= String.valueOf(this.cmbCursos.getSelectedItem());
+           
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT id_curso FROM cursos WHERE cursos.`curso` LIKE'"+seleccion+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                 
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variable=((Integer.parseInt(Datos[i].toString())));
+                              
+                            }
+                        }
+                    }
+                    
+                   con.close();
+                    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          //}
+          
+       } 
+    
+    private void ObtenerIDSeccion(){
+        String seleccion= String.valueOf(this.cmbSecciones.getSelectedItem());
+           
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT id_seccion FROM secciones WHERE secciones.`seccion` LIKE'"+seleccion+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                  // int variable=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variable2=((Integer.parseInt(Datos[i].toString())));
+                                
+                            }
+                        }
+                    }
+                    
+                    con.close();
+                    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+    
+    }
+    
+    private void ObtenerSeccionSeleccionada(){
+       
+        Connection con = null;
+       String ParametroCurso= String.valueOf(this.cmbCursos.getSelectedItem());
+       String ParametroSeccion= String.valueOf(this.cmbSecciones.getSelectedItem());
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT dias.`dia`,horarios.`hora_inicio`,horarios.`hora_fin`\n" +
+                                        "FROM dias\n" +
+                                        "INNER JOIN horarios\n" +
+                                        "INNER JOIN horario_seccion\n" +
+                                        "INNER JOIN secciones\n" +
+                                        "INNER JOIN cursos\n" +
+                                        "ON dias.`id_dia`=horarios.`id_dia`\n" +
+                                        "AND horario_seccion.`id_horario`=horarios.`id_horario`\n" +
+                                        "AND secciones.`id_seccion`=horario_seccion.`id_seccion`\n" +
+                                        "AND secciones.`id_curso`=cursos.`id_curso`\n" +
+                                        "WHERE secciones.`id_seccion`=horario_seccion.`id_seccion` \n" +
+                                        "AND horarios.`id_horario`=horario_seccion.`id_horario`\n" +
+                                        "AND secciones.`seccion`='"+ParametroSeccion+"'\n" +
+                                        "AND cursos.`curso`='"+ParametroCurso+"'");
+            rs = ps.executeQuery();
+            model2 = (DefaultTableModel) this.tblHorarioSeccion.getModel();
+            model2.setRowCount(0);
+          
+            Object Datos[] = new Object[4];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 2) {
+                        model2.addRow(Datos);
+                    }
+                }
+            }
+           con.close();
+        } catch (Exception e) {
+
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -221,21 +804,32 @@ public class Inscripcion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton Secciones;
+    private javax.swing.JButton btnCursos;
+    private javax.swing.JButton btnGenerarReporte;
+    private javax.swing.JButton btnHorarios;
+    private javax.swing.JButton btnInscribir;
+    private javax.swing.JButton btnMenuPrincipal;
+    private javax.swing.JComboBox<String> cmbCursos;
+    private javax.swing.JComboBox<String> cmbSecciones;
+    private javax.swing.JComboBox<String> cmbSecciones1;
+    private javax.swing.JComboBox<String> combo1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblBuscarPor;
+    private javax.swing.JLabel lblMensaje;
+    private javax.swing.JTable tblAlumnos;
+    private javax.swing.JTable tblHorarioSeccion;
+    private javax.swing.JTable tblInscripciones;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

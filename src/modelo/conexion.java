@@ -21,8 +21,8 @@ public class conexion {
     
     private final String base="academia";
     private final String user="root";
-    private final String password="Contraseña123.";
-    private final String URL = "jdbc:mysql://localhost:3306/" + base + "?autoReconnect=true&useSSL=false";
+    private final String password="root";
+    private final String URL = "jdbc:mysql://localhost:3306/" + base;
     private Connection con=null;
     
     public Connection getConexion()
