@@ -5,17 +5,52 @@
  */
 package Inscripciones;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelo.conexion;
+
 /**
  *
  * @author Jose
  */
 public class Secciones extends javax.swing.JFrame {
+    DefaultTableModel model;
+    DefaultTableModel model2;
+    PreparedStatement ps;
+    ResultSet rs;
+    public static String varEdit = "";
+    
+     conexion cn = new conexion();
+     java.sql.Connection con = cn.getConexion();
+     int variableL, variableM, variableMi,variableJ,variableV,variableSa =0;
+    
+ 
+    
 
     /**
      * Creates new form Secciones
      */
     public Secciones() {
         initComponents();
+        Set_ID();
+        CargarCursos(cmbCursos);
+        HorariosLunes(cmbHLunes);
+        HorariosMartes(cmbHMartes);
+        HorariosMiercoles(cmbHMiercoles);
+        HorariosJueves(cmbHJueves);
+        HorariosViernes(cmbHViernes);
+        HorariosSabado(cmbHSabado);
+        BloquearHorarios();
+        MostrarSecciones();
+        this.rbnPrincipiante.setSelected(rootPaneCheckingEnabled);
+      
+      
+        
     }
 
     /**
@@ -35,48 +70,62 @@ public class Secciones extends javax.swing.JFrame {
         buttonGroup4 = new javax.swing.ButtonGroup();
         buttonGroup5 = new javax.swing.ButtonGroup();
         buttonGroup6 = new javax.swing.ButtonGroup();
+        buttonGroup7 = new javax.swing.ButtonGroup();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblSecciones = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtIdSeccion = new javax.swing.JTextField();
+        txtSeccion = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbCursos = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jComboBox7 = new javax.swing.JComboBox<>();
-        jComboBox8 = new javax.swing.JComboBox<>();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
+        ckbLunes = new javax.swing.JCheckBox();
+        cmbHLunes = new javax.swing.JComboBox<>();
+        cmbHMartes = new javax.swing.JComboBox<>();
+        ckbMartes = new javax.swing.JCheckBox();
+        cmbHMiercoles = new javax.swing.JComboBox<>();
+        cmbHJueves = new javax.swing.JComboBox<>();
+        ckbJueves = new javax.swing.JCheckBox();
+        ckbMiercoles = new javax.swing.JCheckBox();
+        cmbHViernes = new javax.swing.JComboBox<>();
+        cmbHSabado = new javax.swing.JComboBox<>();
+        ckbSabado = new javax.swing.JCheckBox();
+        ckbViernes = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        rbnPrincipiante = new javax.swing.JRadioButton();
+        rbnIntermedio = new javax.swing.JRadioButton();
+        rbnAvanzado = new javax.swing.JRadioButton();
+        lblHorario = new javax.swing.JLabel();
+        lblMensaje = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblHorariosSeccion = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        btnSalir = new javax.swing.JButton();
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
 
         jCheckBox3.setText("Lunes");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jButton3.setText("Editar");
 
         jButton4.setText("Eliminar");
 
-        jButton1.setText("Agregar");
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -85,72 +134,166 @@ public class Secciones extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblSecciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Sección", "Curso", "Nivel", "Horario"
+                "Codigo", "Sección", "Curso", "Nivel"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblSecciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSeccionesMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblSeccionesMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblSeccionesMouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblSecciones);
 
         jLabel3.setText("Cod");
 
         jLabel1.setText("Seccion");
 
-        jTextField2.setEditable(false);
+        txtIdSeccion.setEditable(false);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setText("Secciones");
 
         jLabel2.setText("Curso");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Piano", "Guitarra", "Bateria" }));
-
         jLabel4.setText("Dias");
 
-        jCheckBox1.setText("Lunes");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario", "7:00", "9:00" }));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
-
-        jCheckBox2.setText("Martes");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        ckbLunes.setText("Lunes");
+        ckbLunes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                ckbLunesActionPerformed(evt);
             }
         });
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
-
-        jCheckBox4.setText("Jueves");
-
-        jCheckBox5.setText("Miércoles");
-
-        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
-        jComboBox7.addActionListener(new java.awt.event.ActionListener() {
+        cmbHLunes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox7ActionPerformed(evt);
+                cmbHLunesActionPerformed(evt);
             }
         });
 
-        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
+        cmbHMartes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbHMartesActionPerformed(evt);
+            }
+        });
 
-        jCheckBox6.setText("Sábado");
+        ckbMartes.setText("Martes");
+        ckbMartes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckbMartesActionPerformed(evt);
+            }
+        });
 
-        jCheckBox7.setText("Viernes");
+        cmbHMiercoles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbHMiercolesActionPerformed(evt);
+            }
+        });
+
+        cmbHJueves.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbHJuevesActionPerformed(evt);
+            }
+        });
+
+        ckbJueves.setText("Jueves");
+        ckbJueves.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckbJuevesActionPerformed(evt);
+            }
+        });
+
+        ckbMiercoles.setText("Miércoles");
+        ckbMiercoles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckbMiercolesActionPerformed(evt);
+            }
+        });
+
+        cmbHViernes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbHViernesActionPerformed(evt);
+            }
+        });
+
+        cmbHSabado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbHSabadoActionPerformed(evt);
+            }
+        });
+
+        ckbSabado.setText("Sábado");
+        ckbSabado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckbSabadoActionPerformed(evt);
+            }
+        });
+
+        ckbViernes.setText("Viernes");
+        ckbViernes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckbViernesActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Nivel");
 
-        jRadioButton1.setText("Principiante");
+        buttonGroup1.add(rbnPrincipiante);
+        rbnPrincipiante.setText("Principiante");
+        rbnPrincipiante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbnPrincipianteActionPerformed(evt);
+            }
+        });
 
-        jRadioButton2.setText("Intermedio");
+        buttonGroup1.add(rbnIntermedio);
+        rbnIntermedio.setText("Intermedio");
+        rbnIntermedio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbnIntermedioActionPerformed(evt);
+            }
+        });
 
-        jRadioButton3.setText("Avanzado");
+        buttonGroup1.add(rbnAvanzado);
+        rbnAvanzado.setText("Avanzado");
+        rbnAvanzado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbnAvanzadoActionPerformed(evt);
+            }
+        });
+
+        lblHorario.setText("Horarios");
+
+        tblHorariosSeccion.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Dia", "Hora Inicio", "Hora Fin"
+            }
+        ));
+        jScrollPane2.setViewportView(tblHorariosSeccion);
+
+        jLabel7.setText("Sección");
+
+        jLabel8.setText("Detalle Horarios");
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -159,151 +302,1132 @@ public class Secciones extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(jLabel5))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(126, 126, 126)
+                                .addComponent(jLabel3)
+                                .addGap(26, 26, 26))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel6)
+                                .addGap(40, 40, 40)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtIdSeccion, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(432, 432, 432))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblHorario)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(rbnPrincipiante)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(rbnIntermedio)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(rbnAvanzado)
+                                        .addGap(83, 83, 83)
+                                        .addComponent(lblMensaje, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(jLabel4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(280, 280, 280)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(57, 57, 57)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(txtSeccion, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel5))))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ckbSabado)
+                            .addComponent(ckbViernes)
+                            .addComponent(ckbJueves)
+                            .addComponent(ckbMiercoles)
+                            .addComponent(ckbMartes)
+                            .addComponent(ckbLunes))
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cmbHMartes, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbHLunes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbHMiercoles, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbHJueves, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbHViernes, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbHSabado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton3)
-                                .addGap(32, 32, 32)
-                                .addComponent(jButton4)
-                                .addGap(91, 91, 91))
+                                .addComponent(btnAgregar)
+                                .addGap(8, 8, 8)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel3)
-                                                    .addGap(29, 29, 29))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel6)
-                                                .addGap(25, 25, 25)))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jRadioButton1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jRadioButton2))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jLabel2))))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(28, 28, 28)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jCheckBox2)
-                                                    .addComponent(jCheckBox1))
-                                                .addGap(28, 28, 28)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jButton1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButton2))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jCheckBox5)
-                                                    .addComponent(jCheckBox6)
-                                                    .addComponent(jCheckBox7)
-                                                    .addComponent(jCheckBox4))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jRadioButton3)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(0, 37, Short.MAX_VALUE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addGap(32, 32, 32)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addGap(28, 28, 28)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(21, 21, 21))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(410, 410, 410)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addGap(130, 130, 130))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdSeccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(cmbCursos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel1)
+                    .addComponent(txtSeccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                    .addComponent(rbnPrincipiante)
+                    .addComponent(rbnIntermedio)
+                    .addComponent(rbnAvanzado)
+                    .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblHorario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox5)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox4)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox6)
-                    .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addGap(9, 9, 9))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ckbLunes)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cmbHLunes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cmbHMartes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ckbMartes))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cmbHMiercoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ckbMiercoles))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cmbHJueves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ckbJueves))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cmbHViernes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ckbViernes))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cmbHSabado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ckbSabado))))
+                        .addGap(104, 104, 104))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jButton2)
+                                    .addComponent(btnAgregar)
+                                    .addComponent(jButton3)
+                                    .addComponent(jButton4)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSalir)))
+                        .addGap(32, 32, 32))))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    private void ckbMartesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbMartesActionPerformed
 
-    private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox7ActionPerformed
+        if (ckbMartes.isSelected()){
+            cmbHMartes.setEnabled(true);
+           
+        
+        }else{
+            cmbHMartes.setEnabled(false);
+       }
+    }//GEN-LAST:event_ckbMartesActionPerformed
 
+    private void cmbHViernesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHViernesActionPerformed
+      CargarHorarioDia();
+    }//GEN-LAST:event_cmbHViernesActionPerformed
+
+    private void ckbSabadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbSabadoActionPerformed
+        if (ckbSabado.isSelected()){
+            cmbHSabado.setEnabled(true);
+        
+        }else{
+            cmbHSabado.setEnabled(false);
+       }
+    }//GEN-LAST:event_ckbSabadoActionPerformed
+
+    private void ckbJuevesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbJuevesActionPerformed
+      if (ckbJueves.isSelected()){
+            cmbHJueves.setEnabled(true);
+        
+        }else{
+            cmbHJueves.setEnabled(false);
+       }
+    }//GEN-LAST:event_ckbJuevesActionPerformed
+       
+    
+    
+    private void GuardarSeccion(){
+        Connection con = null;
+        int radioSelec=0;
+               //radio button seleccionado
+        if (rbnPrincipiante.isSelected()){
+            radioSelec=1;
+        
+        }else if (rbnIntermedio.isSelected()) {
+            radioSelec=2;
+                }else if (rbnAvanzado.isSelected()){
+            radioSelec=3;
+         
+        }
+             
+            try {
+
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.secciones (id_curso,id_nivel,seccion) values (?,?,?)");
+                ps.setString(1, String.valueOf(this.cmbCursos.getSelectedIndex()));
+                ps.setString(2, String.valueOf(radioSelec));
+                ps.setString(3, String.valueOf(this.txtSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0 && radioSelec!=0) {
+                    JOptionPane.showMessageDialog(null, "Seccion guardada satisfactoriamente");
+                 
+                    GuardarHorarioSeccion();
+                    Set_ID();
+                    MostrarSecciones();
+                    Limpiar();
+                    
+                   
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                
+                
+                
+                System.err.println(e);
+            }
+    
+    
+    }
+    
+    private void GuardarHorarioSeccion(){
+        Connection con = null;
+        
+        if (this.ckbLunes.isSelected()){    
+            try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
+                ps.setString(1, String.valueOf((variableL)));
+                ps.setString(2, String.valueOf(this.txtIdSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "horario guardado satisfactoriamente");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        if (this.ckbMartes.isSelected()){    
+            try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
+                ps.setString(1, String.valueOf((variableM)));
+                ps.setString(2, String.valueOf(this.txtIdSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "horario guardado satisfactoriamente");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        if (this.ckbMiercoles.isSelected()){    
+            try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
+                ps.setString(1, String.valueOf((variableMi)));
+                ps.setString(2, String.valueOf(this.txtIdSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "horario guardado satisfactoriamente");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        if (this.ckbJueves.isSelected()){    
+            try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
+                ps.setString(1, String.valueOf((variableJ)));
+                ps.setString(2, String.valueOf(this.txtIdSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "horario guardado satisfactoriamente");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        if (this.ckbViernes.isSelected()){    
+            try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
+                ps.setString(1, String.valueOf((variableV)));
+                ps.setString(2, String.valueOf(this.txtIdSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "horario guardado satisfactoriamente");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        if (this.ckbSabado.isSelected()){    
+            try {
+                con = (Connection) cn.getConexion();
+
+                ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
+                ps.setString(1, String.valueOf((variableSa)));
+                ps.setString(2, String.valueOf(this.txtIdSeccion.getText()));
+       
+                int res = ps.executeUpdate();
+                
+                
+                    if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "horario guardado satisfactoriamente");
+                 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar Horario");
+                }
+                    
+                con.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+    
+    
+    
+    
+    
+    }
+    
+    
+   private void CargarHorarioDia(){
+       Connection con = null;
+       if (this.ckbLunes.isSelected()){
+          if (this.cmbHLunes.getSelectedIndex()==0){
+              JOptionPane.showMessageDialog(null, "Debe seleccionar un horiario para dia Lunes"); 
+          }else{ 
+                  String codigo= String.valueOf(this.cmbHLunes.getSelectedItem());
+           
+                    String [] partes = codigo.split("-");
+                    String parte1 = partes[0];
+                    String parte2 = partes[1];
+
+                  
+                    
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT horarios.`id_horario` FROM horarios \n" +
+                                                "WHERE horarios.`id_dia`=1 \n" +
+                                                "AND horarios.`hora_inicio` LIKE '"+parte1+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                   // int variable=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variableL=((Integer.parseInt(Datos[i].toString())));
+                               
+                                //this.lblMensaje.setText(String.valueOf(variableL));
+                            }
+                        }
+                    }
+                    
+                    con.close();       
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          }
+          
+       } 
+     
+       if (this.ckbMartes.isSelected()){
+          if (this.cmbHMartes.getSelectedIndex()==0){
+              JOptionPane.showMessageDialog(null, "Debe seleccionar un horiario para dia martes"); 
+          }else{ 
+                  String codigo1= String.valueOf(this.cmbHMartes.getSelectedItem());
+           
+                    String [] partes1 = codigo1.split("-");
+                    String parteM1 = partes1[0];
+                    String parteM2 = partes1[1];
+
+                  
+                    
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT horarios.`id_horario` FROM horarios \n" +
+                                                "WHERE horarios.`id_dia`=2 \n" +
+                                                "AND horarios.`hora_inicio` LIKE '"+parteM1+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                    //int variableM=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variableM=((Integer.parseInt(Datos[i].toString())));
+                               
+                                
+                            }
+                        }
+                    }
+                    con.close();    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          }
+          
+       }if (this.ckbMiercoles.isSelected()){
+          if (this.cmbHMiercoles.getSelectedIndex()==0){
+              JOptionPane.showMessageDialog(null, "Debe seleccionar un horiario para dia martes"); 
+          }else{ 
+                  String codigo1= String.valueOf(this.cmbHMiercoles.getSelectedItem());
+           
+                    String [] partes2 = codigo1.split("-");
+                    String parteMi1 = partes2[0];
+                    String parteMi2 = partes2[1];
+
+                  
+                    
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT horarios.`id_horario` FROM horarios \n" +
+                                                "WHERE horarios.`id_dia`=3 \n" +
+                                                "AND horarios.`hora_inicio` LIKE '"+parteMi1+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                   // int variableMi=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variableMi=((Integer.parseInt(Datos[i].toString())));
+                               
+                                
+                            }
+                        }
+                    }
+                    con.close();    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          }
+          
+       }
+       if (this.ckbJueves.isSelected()){
+          if (this.cmbHJueves.getSelectedIndex()==0){
+              JOptionPane.showMessageDialog(null, "Debe seleccionar un horiario para dia martes"); 
+          }else{ 
+                  String codigo1= String.valueOf(this.cmbHJueves.getSelectedItem());
+           
+                    String [] partes3 = codigo1.split("-");
+                    String parteJ1 = partes3[0];
+                    String parteJ2 = partes3[1];
+
+                  
+                    
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT horarios.`id_horario` FROM horarios \n" +
+                                                "WHERE horarios.`id_dia`=4 \n" +
+                                                "AND horarios.`hora_inicio` LIKE '"+parteJ1+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                    //int variableJ=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variableJ=((Integer.parseInt(Datos[i].toString())));
+                               
+                                
+                            }
+                        }
+                    }
+                    con.close();    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          }
+          
+       }if (this.ckbViernes.isSelected()){
+          if (this.cmbHViernes.getSelectedIndex()==0){
+              JOptionPane.showMessageDialog(null, "Debe seleccionar un horiario para dia martes"); 
+          }else{ 
+                  String codigo1= String.valueOf(this.cmbHViernes.getSelectedItem());
+           
+                    String [] partes4 = codigo1.split("-");
+                    String parteV1 = partes4[0];
+                    String parteV2 = partes4[1];
+
+                  
+                    
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT horarios.`id_horario` FROM horarios \n" +
+                                                "WHERE horarios.`id_dia`=5 \n" +
+                                                "AND horarios.`hora_inicio` LIKE '"+parteV1+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                   // int variableJ=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variableV=((Integer.parseInt(Datos[i].toString())));
+                               
+                               
+                            }
+                        }
+                    }
+                    con.close();    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          }
+          
+       }if (this.ckbSabado.isSelected()){
+          if (this.cmbHSabado.getSelectedIndex()==0){
+              JOptionPane.showMessageDialog(null, "Debe seleccionar un horiario para dia martes"); 
+          }else{ 
+                  String codigo1= String.valueOf(this.cmbHSabado.getSelectedItem());
+           
+                    String [] partes5 = codigo1.split("-");
+                    String parteSa1 = partes5[0];
+                    String parteSa2 = partes5[1];
+
+                  
+                    
+                    try{
+                    con = (Connection) cn.getConexion();
+                    ps = con.prepareStatement("SELECT horarios.`id_horario` FROM horarios \n" +
+                                                "WHERE horarios.`id_dia`=6 \n" +
+                                                "AND horarios.`hora_inicio` LIKE '"+parteSa1+"%'");
+                    
+                    rs = ps.executeQuery();
+                    Object Datos[] = new Object[1];
+                    //int variableSa=0;
+                    while (rs.next()) {
+                        for (int i = 0; i < 1; i++) {
+                            Datos[i] = (rs.getObject(i + 1));
+                            if (i == 0) {
+
+                                variableSa=((Integer.parseInt(Datos[i].toString())));
+                               
+                                
+                            }
+                        }
+                    }
+                    con.close();    
+                } catch (Exception e) {
+                    System.err.println(e);
+            }
+                      
+          }
+          
+       }
+   
+   }
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+      
+         GuardarSeccion();
+          
+          
+          
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void rbnPrincipianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbnPrincipianteActionPerformed
+      
+    }//GEN-LAST:event_rbnPrincipianteActionPerformed
+
+    private void rbnIntermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbnIntermedioActionPerformed
+        
+    }//GEN-LAST:event_rbnIntermedioActionPerformed
+
+    private void rbnAvanzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbnAvanzadoActionPerformed
+        
+    }//GEN-LAST:event_rbnAvanzadoActionPerformed
+
+    private void ckbLunesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbLunesActionPerformed
+      
+      if (ckbLunes.isSelected()){
+            cmbHLunes.setEnabled(true);
+           
+        }else{
+            cmbHLunes.setEnabled(false);
+           
+       }
+    }//GEN-LAST:event_ckbLunesActionPerformed
+
+    private void ckbMiercolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbMiercolesActionPerformed
+        if (ckbMiercoles.isSelected()){
+            cmbHMiercoles.setEnabled(true);
+        
+        }else{
+            cmbHMiercoles.setEnabled(false);
+       }
+    }//GEN-LAST:event_ckbMiercolesActionPerformed
+
+    private void ckbViernesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbViernesActionPerformed
+        if (ckbViernes.isSelected()){
+            cmbHViernes.setEnabled(true);
+        
+        }else{
+            cmbHViernes.setEnabled(false);
+       }
+    }//GEN-LAST:event_ckbViernesActionPerformed
+
+    private void cmbHLunesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHLunesActionPerformed
+        CargarHorarioDia();
+    }//GEN-LAST:event_cmbHLunesActionPerformed
+
+    private void tblSeccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSeccionesMouseClicked
+    
+      String indice=String.valueOf(model.getValueAt(tblSecciones.getSelectedRow(), 0));
+      
+        Connection con = null;
+       
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT dias.`dia`,horarios.`hora_inicio`,horarios.`hora_fin`\n" +
+                                        "FROM dias\n" +
+                                        "INNER JOIN horarios\n" +
+                                        "INNER JOIN horario_seccion\n" +
+                                        "INNER JOIN secciones\n" +
+                                        "ON dias.`id_dia`=horarios.`id_dia`\n" +
+                                        "AND horario_seccion.`id_horario`=horarios.`id_horario`\n" +
+                                        "AND secciones.`id_seccion`=horario_seccion.`id_seccion`\n" +
+                                        "WHERE secciones.`id_seccion`="+indice+" AND horarios.`id_horario`=horario_seccion.`id_horario`");
+            rs = ps.executeQuery();
+            model2 = (DefaultTableModel) this.tblHorariosSeccion.getModel();
+            model2.setRowCount(0);
+          
+            Object Datos[] = new Object[4];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 2) {
+                        model2.addRow(Datos);
+                    }
+                }
+            }
+           
+        } catch (Exception e) {
+
+        }
+    
+      
+    }//GEN-LAST:event_tblSeccionesMouseClicked
+
+    private void tblSeccionesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSeccionesMousePressed
+     
+    }//GEN-LAST:event_tblSeccionesMousePressed
+
+    private void tblSeccionesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSeccionesMouseReleased
+     
+    }//GEN-LAST:event_tblSeccionesMouseReleased
+
+    private void cmbHMartesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHMartesActionPerformed
+        CargarHorarioDia();
+    }//GEN-LAST:event_cmbHMartesActionPerformed
+
+    private void cmbHMiercolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHMiercolesActionPerformed
+         CargarHorarioDia();
+    }//GEN-LAST:event_cmbHMiercolesActionPerformed
+
+    private void cmbHJuevesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHJuevesActionPerformed
+        CargarHorarioDia();
+    }//GEN-LAST:event_cmbHJuevesActionPerformed
+
+    private void cmbHSabadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHSabadoActionPerformed
+       CargarHorarioDia();
+    }//GEN-LAST:event_cmbHSabadoActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void Set_ID(){
+    Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("select auto_increment from information_schema.TABLES where TABLE_SCHEMA= 'academia' and TABLE_NAME = 'secciones'");
+            rs = ps.executeQuery();
+            Object Datos[] = new Object[1];
+            int variable=0;
+            while (rs.next()) {
+                for (int i = 0; i < 1; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 0) {
+                        
+                        variable=((Integer.parseInt(Datos[i].toString())));
+                       // variable+=1;
+                        this.txtIdSeccion.setText(String.valueOf(variable));
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+    
+    } 
+    public void BloquearHorarios(){
+        this.cmbHLunes.setEnabled(false);
+        this.cmbHMartes.setEnabled(false);
+        this.cmbHMiercoles.setEnabled(false);
+        this.cmbHJueves.setEnabled(false);
+        this.cmbHViernes.setEnabled(false);
+        this.cmbHSabado.setEnabled(false);
+    
+    }
+    
+    
+    
+    public void Limpiar(){
+       this.rbnPrincipiante.setSelected(false);
+       this.rbnIntermedio.setSelected(false);
+       this.rbnAvanzado.setSelected(false);
+       this.cmbCursos.setSelectedIndex(0);
+       this.txtSeccion.setText("");
+    }
+    
+    private void MostrarSecciones(){
+    Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT secciones.`id_seccion`, secciones.`seccion`,cursos.`curso`,niveles.`nivel`\n" +
+                                        "FROM secciones \n" +
+                                        "INNER JOIN cursos\n" +
+                                        "INNER JOIN niveles\n" +
+                                        "ON secciones.`id_curso`=cursos.`id_curso`\n" +
+                                        "AND secciones.`id_nivel`=niveles.`id_nivel`\n" +
+                                        "WHERE secciones.`id_curso`=cursos.`id_curso` ORDER BY secciones.id_seccion");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tblSecciones.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[5];
+
+            while (rs.next()) {
+                for (int i = 0; i < 4; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 3) {
+                        model.addRow(Datos);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+    
+       private void MostrarDiasSeccion(){
+        String indice=String.valueOf(model.getValueAt(tblSecciones.getSelectedRow(), 0));
+        Connection con = null;
+       
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("SELECT dias.`dia`,horarios.`hora_inicio`,horarios.`hora_fin`\n" +
+                                        "FROM dias\n" +
+                                        "INNER JOIN horarios\n" +
+                                        "INNER JOIN horario_seccion\n" +
+                                        "INNER JOIN secciones\n" +
+                                        "ON dias.`id_dia`=horarios.`id_dia`\n" +
+                                        "AND horario_seccion.`id_horario`=horarios.`id_horario`\n" +
+                                        "AND secciones.`id_seccion`=horario_seccion.`id_seccion`\n" +
+                                        "WHERE secciones.`id_seccion`="+indice+" AND horarios.`id_horario`=horario_seccion.`id_horario`");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tblHorariosSeccion.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[4];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+                    if (i == 2) {
+                        model.addRow(Datos);
+                    }
+                }
+            }
+           
+        } catch (Exception e) {
+
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+    conexion metodoconec = new conexion(); 
+    public void CargarCursos(JComboBox cmbCursos){
+       
+        java.sql.Connection conectar = null;
+        String SSQL="Select * from cursos";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbCursos.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbCursos.addItem(rs.getString("curso"));
+            
+            
+            
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    
+    public void HorariosLunes(JComboBox cmbHLunes){
+        
+        java.sql.Connection conectar = null;
+        String SSQL="SELECT hora_inicio,hora_fin FROM horarios WHERE horarios.id_dia=1";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbHLunes.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbHLunes.addItem(rs.getString("hora_inicio")+'-'+rs.getString("hora_fin"));
+                    
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    
+    public void HorariosMartes(JComboBox cmbHMartes){
+        
+        java.sql.Connection conectar = null;
+        String SSQL="SELECT hora_inicio,hora_fin FROM horarios WHERE horarios.id_dia=2";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbHMartes.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbHMartes.addItem(rs.getString("hora_inicio")+'-'+rs.getString("hora_fin"));
+                    
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    
+    public void HorariosMiercoles(JComboBox cmbHMiercoles){
+        
+        java.sql.Connection conectar = null;
+        String SSQL="SELECT hora_inicio,hora_fin FROM horarios WHERE horarios.id_dia=3";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbHMiercoles.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbHMiercoles.addItem(rs.getString("hora_inicio")+'-'+rs.getString("hora_fin"));
+                    
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    public void HorariosJueves(JComboBox cmbHJueves){
+        
+        java.sql.Connection conectar = null;
+        String SSQL="SELECT hora_inicio,hora_fin FROM horarios WHERE horarios.id_dia=4";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbHJueves.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbHJueves.addItem(rs.getString("hora_inicio")+'-'+rs.getString("hora_fin"));
+                    
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null,e);
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    public void HorariosViernes(JComboBox cmbHViernes){
+        
+        java.sql.Connection conectar = null;
+        String SSQL="SELECT hora_inicio,hora_fin FROM horarios WHERE horarios.id_dia=5";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbHViernes.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbHViernes.addItem(rs.getString("hora_inicio")+'-'+rs.getString("hora_fin"));
+                    
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
+    public void HorariosSabado(JComboBox cmbHSabado){
+        
+        java.sql.Connection conectar = null;
+        String SSQL="SELECT hora_inicio,hora_fin FROM horarios WHERE horarios.id_dia=6";
+       
+        try{
+            conectar = metodoconec.getConexion();
+            PreparedStatement pst = conectar.prepareStatement(SSQL);     
+            ResultSet rs =pst.executeQuery();
+           
+           //llenar el combobox
+           cmbHSabado.addItem("seleccione");
+           
+            while (rs.next()){
+                cmbHSabado.addItem(rs.getString("hora_inicio")+'-'+rs.getString("hora_fin"));
+                    
+            }
+        } catch (SQLException e ){ 
+            JOptionPane.showMessageDialog(null, e);
+        
+        }finally {
+            if (conectar!=null){
+                try {
+                    conectar.close();
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+               
+            }
+        
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -340,43 +1464,51 @@ public class Secciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.ButtonGroup buttonGroup5;
     private javax.swing.ButtonGroup buttonGroup6;
-    private javax.swing.JButton jButton1;
+    private javax.swing.ButtonGroup buttonGroup7;
+    private javax.swing.JCheckBox ckbJueves;
+    private javax.swing.JCheckBox ckbLunes;
+    private javax.swing.JCheckBox ckbMartes;
+    private javax.swing.JCheckBox ckbMiercoles;
+    private javax.swing.JCheckBox ckbSabado;
+    private javax.swing.JCheckBox ckbViernes;
+    private javax.swing.JComboBox<String> cmbCursos;
+    private javax.swing.JComboBox<String> cmbHJueves;
+    private javax.swing.JComboBox<String> cmbHLunes;
+    private javax.swing.JComboBox<String> cmbHMartes;
+    private javax.swing.JComboBox<String> cmbHMiercoles;
+    private javax.swing.JComboBox<String> cmbHSabado;
+    private javax.swing.JComboBox<String> cmbHViernes;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JComboBox<String> jComboBox7;
-    private javax.swing.JComboBox<String> jComboBox8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblHorario;
+    private javax.swing.JLabel lblMensaje;
+    private javax.swing.JRadioButton rbnAvanzado;
+    private javax.swing.JRadioButton rbnIntermedio;
+    private javax.swing.JRadioButton rbnPrincipiante;
+    private javax.swing.JTable tblHorariosSeccion;
+    private javax.swing.JTable tblSecciones;
+    private javax.swing.JTextField txtIdSeccion;
+    private javax.swing.JTextField txtSeccion;
     // End of variables declaration//GEN-END:variables
 }
