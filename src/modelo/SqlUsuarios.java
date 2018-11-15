@@ -24,7 +24,7 @@ public class SqlUsuarios extends conexion {
         PreparedStatement ps = null;
         Connection con = getConexion();
 
-        String sql = "INSERT INTO usuarios(usuario,contra,nombre,correo,id_tipo)"
+        String sql = "INSERT INTO Academia.usuarios(usuario,contra,nombre,correo,id_tipo)"
                 + "VALUES(?,?,?,?,?)";
         try {
             ps = con.prepareStatement(sql);
@@ -48,8 +48,8 @@ public class SqlUsuarios extends conexion {
         ResultSet rs = null;
         Connection con = getConexion();
 
-        String sql = "SELECT u.id, u.usuario, u.contra, u.nombre, u.id_tipo,t.nombre FROM usuarios"
-                + " AS u INNER JOIN tipo_usuario AS t ON u.id_tipo=t.id  WHERE usuario=?";
+        String sql = "SELECT usuarios.id, usuario, contra, usuarios.nombre, id_tipo,tipo_usuario.nombre FROM Academia.usuarios "
+                + "INNER JOIN tipo_usuario ON usuarios.id=tipo_usuario.id  WHERE usuario=?";
 
         try {
             ps = con.prepareStatement(sql);
@@ -88,7 +88,7 @@ public class SqlUsuarios extends conexion {
         ResultSet rs = null;
         Connection con = getConexion();
 
-        String sql = "SELECT count(id)FROM usuarios WHERE usuario=?";
+        String sql = "SELECT count(id)FROM Academia.usuarios WHERE usuario=?";
 
         try {
             ps = con.prepareStatement(sql);
