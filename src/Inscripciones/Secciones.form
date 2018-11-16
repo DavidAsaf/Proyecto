@@ -70,14 +70,19 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="txtIdSeccion" min="-2" pref="55" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="432" max="-2" attributes="0"/>
+
                           </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
+
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblHorario" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -89,6 +94,7 @@
                                       <Component id="rbnAvanzado" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
                                       <Component id="lblMensaje" pref="395" max="32767" attributes="0"/>
+
                                   </Group>
                               </Group>
                           </Group>
@@ -111,9 +117,57 @@
                                       <Component id="jLabel1" min="-2" pref="44" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="txtSeccion" min="-2" pref="107" max="-2" attributes="0"/>
+
                                   </Group>
                                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               </Group>
+                          </Group>
+                      </Group>
+
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="ckbSabado" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ckbViernes" min="-2" max="-2" attributes="0"/>
+                          <Component id="ckbJueves" min="-2" max="-2" attributes="0"/>
+                          <Component id="ckbMiercoles" min="-2" max="-2" attributes="0"/>
+                          <Component id="ckbMartes" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ckbLunes" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="35" pref="35" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                  <Component id="cmbHMartes" alignment="1" min="-2" pref="149" max="-2" attributes="0"/>
+                                  <Component id="cmbHLunes" alignment="0" min="-2" pref="149" max="-2" attributes="0"/>
+                                  <Component id="cmbHMiercoles" alignment="1" min="-2" pref="149" max="-2" attributes="0"/>
+                                  <Component id="cmbHJueves" alignment="1" min="-2" pref="149" max="-2" attributes="0"/>
+                                  <Component id="cmbHViernes" alignment="1" min="-2" pref="149" max="-2" attributes="0"/>
+
+                              </Group>
+                              <Component id="cmbHSabado" alignment="1" min="-2" pref="149" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="btnAgregar" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                              <Component id="jScrollPane2" min="-2" pref="254" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="btnEditar" min="-2" pref="70" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                              <Component id="btnActualizar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnSalir" min="-2" pref="88" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -251,11 +305,13 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
+
                                   <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnAgregar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnEditar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnActualizar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -633,9 +689,11 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblHorariosSeccionMouseClicked"/>
           </Events>
+
         </Component>
       </SubComponents>
     </Container>
@@ -656,6 +714,16 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalirActionPerformed"/>
       </Events>
+
+    </Component>
+    <Component class="javax.swing.JButton" name="btnActualizar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Actualizar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarActionPerformed"/>
+      </Events>
+
     </Component>
     <Component class="javax.swing.JButton" name="btnActualizar">
       <Properties>

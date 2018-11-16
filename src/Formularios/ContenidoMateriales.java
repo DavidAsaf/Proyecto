@@ -7,7 +7,7 @@ package Formularios;
 
 /**
  *
- * @author asafamaya
+ * @author grupo_5
  */
 public class ContenidoMateriales extends javax.swing.JFrame {
 
