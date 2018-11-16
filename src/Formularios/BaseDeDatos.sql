@@ -40,6 +40,16 @@ info_ocupacion, tel_ocupacion,direccion,email) values
 ('ASAF', 'AMAYA', '15','12/12/2012','PIANO','8:00-9:00 AM','SANTA ANA', 'Claro','5555-5555',
 '2526-3214', 'UNICAES', '2369-8745', 'ALLA POR LA ESQUINA','asaf@invento.com');
 
+CREATE TABLE `academia`.`usuarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(45) NOT NULL,
+  `contra` VARCHAR(45) NOT NULL,
+  `nombre` VARCHAR(45) NOT NULL,
+  `correo` VARCHAR(45) NOT NULL,
+  `inicio_anterior` DATETIME NULL DEFAULT '0000-00-00 00:00:00',
+  `id_tipo` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`));
+
 CREATE TABLE `academia`.`tipo_usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
@@ -71,7 +81,8 @@ values
 create table academia.Salida_Articulos(
 ReporteID int primary key auto_increment, 
 Lugar_Evento varchar(800),
-Fecha_Evento varchar(10)
+Fecha_Evento varchar(10),
+Activo boolean default true
 );
 
 insert into academia.Salida_Articulos(Lugar_Evento, Fecha_Evento)

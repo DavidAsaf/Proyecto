@@ -211,6 +211,11 @@ public class salidaEvento extends javax.swing.JFrame {
         jButton4.setText("Imprimir y Guardar");
 
         jButton5.setText("Menu Principal");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Lugar de evento:");
 
@@ -515,14 +520,19 @@ public class salidaEvento extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        GuardarReporte();
-        GuardarSalida();
-        DisminucionInventario();
-        JOptionPane.showMessageDialog(null, "Todo fue guardado con exito");
+        try {
+            GuardarReporte();
+            GuardarSalida();
+            DisminucionInventario();
+            JOptionPane.showMessageDialog(null, "Todo fue guardado con exito");
+
+            MenuInventario MI = new MenuInventario();
+            MI.setVisible(true);
+            this.dispose();
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "Hubo error al guardar.");
+        }
         
-        MenuInventario MI = new MenuInventario();
-        MI.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtLugarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLugarEventoActionPerformed
@@ -593,6 +603,12 @@ public class salidaEvento extends javax.swing.JFrame {
         // TODO add your handling code here:
         convertirMayus(evt);
     }//GEN-LAST:event_txtLugarEventoKeyTyped
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        MenuInventario abrir = new MenuInventario();
+        abrir.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     public void convertirMayus(java.awt.event.KeyEvent evtC) {
 

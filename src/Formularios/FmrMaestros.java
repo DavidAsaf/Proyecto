@@ -71,6 +71,11 @@ public class FmrMaestros extends javax.swing.JFrame {
         });
 
         btnEliminarMaestro.setText("Eliminar");
+        btnEliminarMaestro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarMaestroActionPerformed(evt);
+            }
+        });
 
         jblMaestros.setFont(new java.awt.Font("Chilanka", 1, 36)); // NOI18N
         jblMaestros.setText("Maestros");
@@ -262,6 +267,10 @@ public class FmrMaestros extends javax.swing.JFrame {
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtbuscarActionPerformed
+
+    private void btnEliminarMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarMaestroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarMaestroActionPerformed
 
      public void ver_Maestros() {
         Connection con = null;
