@@ -24,9 +24,11 @@ public class Cursos extends javax.swing.JFrame {
 
     conexion cn = new conexion();
     java.sql.Connection con = cn.getConexion();
+
     boolean haySeleccion=false;
     boolean existeCurso=false;
     int vacio=0;
+
     /**
      * Creates new form Cursos
      */
@@ -36,7 +38,9 @@ public class Cursos extends javax.swing.JFrame {
         MostrarCursos();
         btnAgregar.setEnabled(true);
         btnActualizar.setEnabled(false);
+
         btnEliminar.setEnabled(true);
+
     }
 
     /**
@@ -63,7 +67,9 @@ public class Cursos extends javax.swing.JFrame {
         btnActualizar = new javax.swing.JButton();
         lblVariable = new javax.swing.JLabel();
         btnSalir1 = new javax.swing.JButton();
+
         lblMensaje = new javax.swing.JLabel();
+
 
         btnSalir.setText("Salir");
 
@@ -94,11 +100,13 @@ public class Cursos extends javax.swing.JFrame {
                 "Id Curso", "Curso"
             }
         ));
+
         tblCursos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblCursosMouseClicked(evt);
             }
         });
+
         jScrollPane1.setViewportView(tblCursos);
 
         jLabel3.setText("Cod");
@@ -116,11 +124,13 @@ public class Cursos extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
+
 
         btnActualizar.setText("Actualizar");
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -152,7 +162,11 @@ public class Cursos extends javax.swing.JFrame {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnCancelar)
+                                .addComponent(txtCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
+
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtIdCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
@@ -167,6 +181,7 @@ public class Cursos extends javax.swing.JFrame {
                                     .addComponent(btnCancelar)
                                     .addComponent(txtCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(19, 144, Short.MAX_VALUE))))
+
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAgregar)
@@ -180,10 +195,12 @@ public class Cursos extends javax.swing.JFrame {
                                     .addComponent(btnSalir1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 9, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -200,6 +217,7 @@ public class Cursos extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -210,17 +228,21 @@ public class Cursos extends javax.swing.JFrame {
                     .addComponent(btnCancelar))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalir1))
                     .addGroup(layout.createSequentialGroup()
+
                         .addComponent(btnEditar)
                         .addGap(18, 18, 18)
                         .addComponent(btnActualizar)
                         .addGap(14, 14, 14)
+
                         .addComponent(btnEliminar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+
         );
 
         pack();
@@ -233,11 +255,14 @@ public class Cursos extends javax.swing.JFrame {
       btnAgregar.setEnabled(true);
       btnActualizar.setEnabled(false);
       btnEliminar.setEnabled(false);
+
        btnEliminar.setEnabled(true);
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         Connection con = null;
+
     
         if (this.txtCurso.getText().length()==0){
             JOptionPane.showMessageDialog(null, "Debe ingresar un curso");
@@ -341,6 +366,7 @@ public class Cursos extends javax.swing.JFrame {
         
         
 
+
             try {
 
                 con = (Connection) cn.getConexion();
@@ -360,7 +386,9 @@ public class Cursos extends javax.swing.JFrame {
                     btnActualizar.setEnabled(false);
                     btnAgregar.setEnabled(true);
                     Set_ID();
+
                     haySeleccion=false;
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al guardar el Curso. Vuelva a intentarlo.");
                 }
@@ -375,6 +403,7 @@ public class Cursos extends javax.swing.JFrame {
     private void btnSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalir1ActionPerformed
        this.dispose();
     }//GEN-LAST:event_btnSalir1ActionPerformed
+
 
     private void tblCursosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCursosMouseClicked
         haySeleccion=true;
@@ -422,6 +451,7 @@ public class Cursos extends javax.swing.JFrame {
     
     
     
+
     private void EdicionCurso(){
      Connection con = null;
 
@@ -486,7 +516,9 @@ public class Cursos extends javax.swing.JFrame {
 
         try {
             con = (Connection) cn.getConexion();
+
             ps = con.prepareStatement("select id_curso,curso from cursos where cursos.id_estado_curso=1");
+
             rs = ps.executeQuery();
             model = (DefaultTableModel) this.tblCursos.getModel();
             model.setRowCount(0);
@@ -554,7 +586,9 @@ public class Cursos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+
     private javax.swing.JLabel lblMensaje;
+
     private javax.swing.JLabel lblVariable;
     private javax.swing.JTable tblCursos;
     private javax.swing.JTextField txtCurso;

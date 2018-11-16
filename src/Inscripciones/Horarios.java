@@ -76,7 +76,9 @@ public class Horarios extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         cmbTiempoF = new javax.swing.JComboBox<>();
         btnSalir = new javax.swing.JButton();
+
         lblMensaje = new javax.swing.JLabel();
+
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -133,6 +135,7 @@ public class Horarios extends javax.swing.JFrame {
         jLabel4.setText("Hora Fin");
 
         cmbHoraI.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+
         cmbHoraI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbHoraIActionPerformed(evt);
@@ -145,6 +148,7 @@ public class Horarios extends javax.swing.JFrame {
                 cmbMinutosIActionPerformed(evt);
             }
         });
+
 
         jLabel5.setText(":");
 
@@ -215,6 +219,7 @@ public class Horarios extends javax.swing.JFrame {
                         .addGap(199, 199, 199))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
                             .addComponent(jLabel3)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -237,12 +242,14 @@ public class Horarios extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
+
                                         .addComponent(cmbHoraF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(2, 2, 2)
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(cmbMinutosF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+
                                         .addComponent(cmbTiempoF, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
@@ -258,6 +265,7 @@ public class Horarios extends javax.swing.JFrame {
                             .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(8, 8, 8))))
+
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,8 +281,10 @@ public class Horarios extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
+
                             .addComponent(cmbDias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -289,21 +299,25 @@ public class Horarios extends javax.swing.JFrame {
                         .addComponent(cmbMinutosF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel7)
                         .addComponent(cmbTiempoF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(107, 107, 107)
                         .addComponent(btnEditar)
                         .addGap(30, 30, 30)
+
                         .addComponent(btnEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSalir)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
+
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAgregar)
                             .addComponent(btnCancelar))
                         .addGap(18, 18, 18)
+
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(55, 55, 55))))
         );
@@ -313,7 +327,9 @@ public class Horarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+
         Resetear();
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtIdCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdCursoActionPerformed
@@ -321,6 +337,7 @@ public class Horarios extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIdCursoActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+
        String horaI =String.valueOf(this.cmbHoraI.getSelectedItem());
               horaI += String.valueOf(this.cmbMinutosI.getSelectedItem());
               horaI += String.valueOf(this.cmbTiempoI.getSelectedItem());
@@ -339,6 +356,7 @@ public class Horarios extends javax.swing.JFrame {
               }else {
             Connection con = null;
 
+
             try {
 
                 con = (Connection) cn.getConexion();
@@ -354,7 +372,9 @@ public class Horarios extends javax.swing.JFrame {
 
                     Set_ID();
                     MostrarHorarios();
+
                     Resetear();
+
                  
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al guardar Horario");
@@ -364,13 +384,16 @@ public class Horarios extends javax.swing.JFrame {
             } catch (Exception e) {
                 System.err.println(e);
             }
+
         }   
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
             
             this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
 
     private void cmbHoraIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHoraIActionPerformed
         
@@ -400,6 +423,7 @@ public class Horarios extends javax.swing.JFrame {
                     }
                 }
             }
+
 
         } catch (Exception e) {
 
@@ -468,6 +492,7 @@ public class Horarios extends javax.swing.JFrame {
         }
     }
     
+
     public void Resetear(){
         this.cmbDias.setSelectedIndex(0);
         this.cmbHoraF.setSelectedIndex(0);    
@@ -479,6 +504,7 @@ public class Horarios extends javax.swing.JFrame {
     }
   
     
+
     /**
      * @param args the command line arguments
      */
@@ -541,7 +567,9 @@ public class Horarios extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+
     private javax.swing.JLabel lblMensaje;
+
     private javax.swing.JTable tblHorarios;
     private javax.swing.JTextField txtIdCurso;
     // End of variables declaration//GEN-END:variables

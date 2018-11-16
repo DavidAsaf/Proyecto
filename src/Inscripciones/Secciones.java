@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
+
 import javax.swing.table.DefaultTableModel;
 import modelo.conexion;
 
@@ -25,12 +26,14 @@ public class Secciones extends javax.swing.JFrame {
     PreparedStatement ps;
     ResultSet rs;
     public static String varEdit = "";
+
     public static String varEdit2 = "";
      conexion cn = new conexion();
      java.sql.Connection con = cn.getConexion();
      int variableL, variableM, variableMi,variableJ,variableV,variableSa =0;
     boolean haySeleccion =false;
   int vacio=0;
+
     
 
     /**
@@ -49,8 +52,10 @@ public class Secciones extends javax.swing.JFrame {
         BloquearHorarios();
         MostrarSecciones();
         this.rbnPrincipiante.setSelected(rootPaneCheckingEnabled);
+
         this.btnActualizar.setEnabled(false);
         this.btnEliminar.setEnabled(false);
+
       
         
     }
@@ -73,10 +78,12 @@ public class Secciones extends javax.swing.JFrame {
         buttonGroup5 = new javax.swing.ButtonGroup();
         buttonGroup6 = new javax.swing.ButtonGroup();
         buttonGroup7 = new javax.swing.ButtonGroup();
+
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSecciones = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
@@ -110,7 +117,9 @@ public class Secciones extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
+
         btnActualizar = new javax.swing.JButton();
+
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elija un Horario" }));
 
@@ -264,6 +273,7 @@ public class Secciones extends javax.swing.JFrame {
             }
         });
 
+
         buttonGroup1.add(rbnIntermedio);
         rbnIntermedio.setText("Intermedio");
         rbnIntermedio.addActionListener(new java.awt.event.ActionListener() {
@@ -301,6 +311,7 @@ public class Secciones extends javax.swing.JFrame {
 
         jLabel8.setText("Detalle Horarios");
 
+
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -308,12 +319,14 @@ public class Secciones extends javax.swing.JFrame {
             }
         });
 
+
         btnActualizar.setText("Actualizar");
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
             }
         });
+
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -376,6 +389,7 @@ public class Secciones extends javax.swing.JFrame {
                             .addComponent(ckbLunes))
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(cmbHMartes, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -386,12 +400,14 @@ public class Secciones extends javax.swing.JFrame {
                                 .addComponent(cmbHSabado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnAgregar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addGap(32, 32, 32)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
+
                                 .addComponent(btnCancelar)
                                 .addGap(26, 26, 26)
                                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -399,6 +415,7 @@ public class Secciones extends javax.swing.JFrame {
                                 .addComponent(btnActualizar)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnEliminar)
+
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(21, 21, 21))
@@ -473,11 +490,13 @@ public class Secciones extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+
                                     .addComponent(btnCancelar)
                                     .addComponent(btnAgregar)
                                     .addComponent(btnEditar)
                                     .addComponent(btnActualizar)
                                     .addComponent(btnEliminar)))
+
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnSalir)))
@@ -546,6 +565,7 @@ public class Secciones extends javax.swing.JFrame {
             try {
 
                 con = (Connection) cn.getConexion();
+
 
                 ps = con.prepareStatement("insert into academia.secciones (id_curso,id_nivel,seccion) values (?,?,?)");
                 ps.setString(1, String.valueOf(this.cmbCursos.getSelectedIndex()));
@@ -654,6 +674,7 @@ public class Secciones extends javax.swing.JFrame {
         if (this.ckbJueves.isSelected()){    
             try {
                 con = (Connection) cn.getConexion();
+
 
                 ps = con.prepareStatement("insert into academia.horario_seccion (id_horario,id_seccion) values (?,?)");
                 ps.setString(1, String.valueOf((variableJ)));
@@ -982,6 +1003,7 @@ public class Secciones extends javax.swing.JFrame {
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
       
+
           if (this.txtSeccion.getText().length()==0){
             JOptionPane.showMessageDialog(null, "Debe ingresar una seccion");
             
@@ -995,6 +1017,7 @@ public class Secciones extends javax.swing.JFrame {
           
       }    
      }     
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void rbnPrincipianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbnPrincipianteActionPerformed
@@ -1010,9 +1033,11 @@ public class Secciones extends javax.swing.JFrame {
     }//GEN-LAST:event_rbnAvanzadoActionPerformed
 
     private void ckbLunesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbLunesActionPerformed
+
      
       if (ckbLunes.isSelected()){
           
+
             cmbHLunes.setEnabled(true);
            
         }else{
@@ -1044,9 +1069,11 @@ public class Secciones extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbHLunesActionPerformed
 
     private void tblSeccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSeccionesMouseClicked
+
      
     CargarHorarioSeccion();
    // Resetear();
+
       
     }//GEN-LAST:event_tblSeccionesMouseClicked
 
@@ -1077,6 +1104,7 @@ public class Secciones extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
        btnActualizar.setEnabled(true);
@@ -1143,6 +1171,7 @@ public class Secciones extends javax.swing.JFrame {
                 System.err.println(e);
             }
     }//GEN-LAST:event_btnActualizarActionPerformed
+
 
     private void Set_ID(){
     Connection con = null;
@@ -1221,11 +1250,13 @@ public class Secciones extends javax.swing.JFrame {
         }
     }
     
+
     public void CargarHorarioSeccion(){
          haySeleccion=true;
       
       String indice=String.valueOf(model.getValueAt(tblSecciones.getSelectedRow(), 0));
       
+
         Connection con = null;
        
 
@@ -1241,16 +1272,20 @@ public class Secciones extends javax.swing.JFrame {
                                         "AND secciones.`id_seccion`=horario_seccion.`id_seccion`\n" +
                                         "WHERE secciones.`id_seccion`="+indice+" AND horarios.`id_horario`=horario_seccion.`id_horario`");
             rs = ps.executeQuery();
+
             model2 = (DefaultTableModel) this.tblHorariosSeccion.getModel();
             model2.setRowCount(0);
           
+
             Object Datos[] = new Object[4];
 
             while (rs.next()) {
                 for (int i = 0; i < 3; i++) {
                     Datos[i] = (rs.getObject(i + 1));
                     if (i == 2) {
+
                         model2.addRow(Datos);
+
                     }
                 }
             }
@@ -1258,8 +1293,10 @@ public class Secciones extends javax.swing.JFrame {
         } catch (Exception e) {
 
         }
+
     
     }
+
 
     conexion metodoconec = new conexion(); 
     public void CargarCursos(JComboBox cmbCursos){
@@ -1492,6 +1529,7 @@ public class Secciones extends javax.swing.JFrame {
         
         }
     }
+
     
     private void Edicion(){
         String principiante="1";
@@ -1650,6 +1688,7 @@ public class Secciones extends javax.swing.JFrame {
                 
     
     
+
     /**
      * @param args the command line arguments
      */
@@ -1686,11 +1725,13 @@ public class Secciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+
     private javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -1712,6 +1753,7 @@ public class Secciones extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbHMiercoles;
     private javax.swing.JComboBox<String> cmbHSabado;
     private javax.swing.JComboBox<String> cmbHViernes;
+
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
