@@ -161,6 +161,7 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().add(jButton7);
         jButton7.setBounds(530, 400, 196, 102);
 
+
         lblTipoUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTipoUsuario.setForeground(new java.awt.Color(255, 255, 255));
         lblTipoUsuario.setText("Nombre");
@@ -182,6 +183,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/registro/Fondo1.jpeg"))); // NOI18N
         getContentPane().add(jLabel6);
         jLabel6.setBounds(90, 110, 1100, 550);
+
 
         menuUsuario.setText("Usuario");
         jMenuBar3.add(menuUsuario);
