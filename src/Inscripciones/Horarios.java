@@ -76,6 +76,7 @@ public class Horarios extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         cmbTiempoF = new javax.swing.JComboBox<>();
         btnSalir = new javax.swing.JButton();
+        lblMensaje = new javax.swing.JLabel();
 
         lblMensaje = new javax.swing.JLabel();
 
@@ -135,6 +136,11 @@ public class Horarios extends javax.swing.JFrame {
         jLabel4.setText("Hora Fin");
 
         cmbHoraI.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        cmbHoraI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbHoraIActionPerformed(evt);
+            }
+        });
 
         cmbHoraI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

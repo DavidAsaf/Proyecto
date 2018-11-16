@@ -26,7 +26,9 @@ public class Cursos extends javax.swing.JFrame {
     java.sql.Connection con = cn.getConexion();
 
     boolean haySeleccion=false;
-    
+
+    boolean existeCurso=false;
+    int vacio=0;
 
     /**
      * Creates new form Cursos
@@ -66,6 +68,7 @@ public class Cursos extends javax.swing.JFrame {
         btnActualizar = new javax.swing.JButton();
         lblVariable = new javax.swing.JLabel();
         btnSalir1 = new javax.swing.JButton();
+        lblMensaje = new javax.swing.JLabel();
 
         lblMensaje = new javax.swing.JLabel();
 
@@ -166,9 +169,6 @@ public class Cursos extends javax.swing.JFrame {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnCancelar)
-                                .addComponent(txtCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
 
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,6 +273,15 @@ public class Cursos extends javax.swing.JFrame {
             
         }else{
 
+             VerificarCurso();
+                if (vacio==0){
+                    JOptionPane.showMessageDialog(null, "Curso ya existe");
+                    limpiar();
+                }else{
+                   // JOptionPane.showMessageDialog(null, "Curso NO existe");
+                
+            
+
             try {
 
                 con = (Connection) cn.getConexion();
@@ -298,7 +307,8 @@ public class Cursos extends javax.swing.JFrame {
                 System.err.println(e);
             }
 
-        }                 
+        }  
+        } 
 
     }//GEN-LAST:event_btnAgregarActionPerformed
 

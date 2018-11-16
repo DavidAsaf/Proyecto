@@ -269,5 +269,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalir1ActionPerformed"/>
       </Events>
     </Component>
+    <Component class="javax.swing.JLabel" name="lblMensaje">
+    </Component>
   </SubComponents>
 </Form>

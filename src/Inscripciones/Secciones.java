@@ -117,6 +117,7 @@ public class Secciones extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
 
         btnActualizar = new javax.swing.JButton();
 
