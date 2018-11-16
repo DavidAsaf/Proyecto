@@ -8,6 +8,7 @@ package Formularios;
 import Inventario.MenuInventario;
 import Alumnos.VerAlumnos;
 import modelo.usuarios;
+import registro.frmLogin;
 
 //prueba
 
@@ -18,20 +19,22 @@ import modelo.usuarios;
 public class MainForm extends javax.swing.JFrame {
 
     usuarios mod;
-
+    public static String varTipoUsuario;
 
 
     public MainForm() {
         initComponents();
-
+        this.setLocationRelativeTo(null);
+        varTipoUsuario = frmLogin.varCompartir;
+        lblTipoUsuario.setText(varTipoUsuario);
     }
 
     public MainForm(usuarios mod) {
         initComponents();
         setLocationRelativeTo(null);
         this.mod = mod;
-        lblNombre.setText(mod.getUsuario());
-        lblRol.setText(mod.getNombre_tipo());
+        lblTipoUsuario.setText(mod.getUsuario());
+        //lblRol.setText(mod.getNombre_tipo());
         if(mod.getId_tipo()==1)
         {
         }else if(mod.getId_tipo()==2){
@@ -62,8 +65,11 @@ public class MainForm extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        lblNombre = new javax.swing.JLabel();
-        lblRol = new javax.swing.JLabel();
+        lblTipoUsuario = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jMenuBar3 = new javax.swing.JMenuBar();
         menuUsuario = new javax.swing.JMenu();
         menuAdmin = new javax.swing.JMenu();
@@ -78,9 +84,8 @@ public class MainForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-
+        setMaximumSize(new java.awt.Dimension(700, 700));
         setPreferredSize(new java.awt.Dimension(1000, 650));
-
         setResizable(false);
         setSize(new java.awt.Dimension(1310, 903));
         getContentPane().setLayout(null);
@@ -93,9 +98,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-
         jButton1.setBounds(220, 140, 196, 102);
-
 
         jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton2.setText("Alumnos");
@@ -105,9 +108,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-
         jButton2.setBounds(530, 140, 196, 102);
-
 
         jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton3.setText("Maestros");
@@ -117,23 +118,18 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3);
-
         jButton3.setBounds(220, 270, 196, 102);
-
 
         jButton4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton4.setText("Clases");
         getContentPane().add(jButton4);
-
         jButton4.setBounds(530, 270, 196, 102);
 
-
         jLabel1.setFont(new java.awt.Font("Chilanka", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Menú Principal");
         getContentPane().add(jLabel1);
-
         jLabel1.setBounds(320, 30, 344, 52);
-
 
         jButton5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jButton5.setText("Salir");
@@ -143,9 +139,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5);
-
-        jButton5.setBounds(620, 550, 100, 49);
-
+        jButton5.setBounds(890, 550, 100, 49);
 
         jButton6.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton6.setText("Inventario");
@@ -155,9 +149,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton6);
-
         jButton6.setBounds(220, 400, 196, 102);
-
 
         jButton7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton7.setText("Cobros");
@@ -167,17 +159,29 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton7);
-
         jButton7.setBounds(530, 400, 196, 102);
 
+        lblTipoUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTipoUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        lblTipoUsuario.setText("Nombre");
+        getContentPane().add(lblTipoUsuario);
+        lblTipoUsuario.setBounds(790, 0, 130, 75);
 
-        lblNombre.setText("Nombre");
-        getContentPane().add(lblNombre);
-        lblNombre.setBounds(570, 10, 93, 75);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/registro/Fondo1.jpeg"))); // NOI18N
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(0, 0, 1100, 550);
 
-        lblRol.setText("Cargo");
-        getContentPane().add(lblRol);
-        lblRol.setBounds(640, 10, 118, 75);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/registro/Fondo1.jpeg"))); // NOI18N
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(0, 0, 1100, 550);
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/registro/Fondo1.jpeg"))); // NOI18N
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(0, 110, 1100, 550);
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/registro/Fondo1.jpeg"))); // NOI18N
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(90, 110, 1100, 550);
 
         menuUsuario.setText("Usuario");
         jMenuBar3.add(menuUsuario);
@@ -300,12 +304,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
-    private javax.swing.JLabel lblNombre;
-    private javax.swing.JLabel lblRol;
+    private javax.swing.JLabel lblTipoUsuario;
     private javax.swing.JMenu menuAdmin;
     private javax.swing.JMenu menuUsuario;
     private javax.swing.JMenuItem subRegistro;

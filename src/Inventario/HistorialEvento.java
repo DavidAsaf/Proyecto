@@ -5,17 +5,98 @@
  */
 package Inventario;
 
+import Formularios.MainForm;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import modelo.conexion;
+
 /**
  *
  * @author Gerson Lopez
  */
 public class HistorialEvento extends javax.swing.JFrame {
 
+    DefaultTableModel model;
+    DefaultTableModel model2;
+    PreparedStatement ps;
+    ResultSet rs;
+
+    conexion cn = new conexion();
+    java.sql.Connection con = cn.getConexion();
+
     /**
      * Creates new form HistorialEvento
      */
     public HistorialEvento() {
         initComponents();
+        cargarTablaEleccion("Entradas");
+        model = (DefaultTableModel) tabla1.getModel();
+        model2 = (DefaultTableModel) tabla2.getModel();
+        
+        this.setLocationRelativeTo(null);
+    }
+
+    private void cargarTablaEleccion(String variable) {
+        if (variable.equals("Entradas")) {
+            mostrarEntradas();
+        }else if (variable.equals("Salidas")){
+            mostrarSalidas();
+        }
+    }
+
+    private void mostrarSalidas(){
+        Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("call LlamarSalida;");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tabla1.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[3];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+
+                    if (i == 2) {
+                        model.addRow(Datos);
+                    }
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+
+        }
+    }
+    
+    
+    private void mostrarEntradas() {
+        Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("call LlamarEntrada;");
+            rs = ps.executeQuery();
+            model = (DefaultTableModel) this.tabla1.getModel();
+            model.setRowCount(0);
+            Object Datos[] = new Object[3];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+
+                    if (i == 2) {
+                        model.addRow(Datos);
+                    }
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+
+        }
     }
 
     /**
@@ -29,12 +110,12 @@ public class HistorialEvento extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabla2 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rbEntradas = new javax.swing.JRadioButton();
+        rbSalidas = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -44,58 +125,78 @@ public class HistorialEvento extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "ID", "Nombre", "Fecha"
+                "ID Reporte", "Lugar Evento", "Fecha"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(80);
-            jTable1.getColumnModel().getColumn(2).setMinWidth(140);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(150);
+        tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabla1);
+        if (tabla1.getColumnModel().getColumnCount() > 0) {
+            tabla1.getColumnModel().getColumn(0).setMaxWidth(80);
+            tabla1.getColumnModel().getColumn(2).setMinWidth(140);
+            tabla1.getColumnModel().getColumn(2).setMaxWidth(150);
         }
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabla2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Id", "Artículos", "Cantidades"
+                "ID Articulo", "Artículo", "Cantidades"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setMaxWidth(80);
-            jTable2.getColumnModel().getColumn(2).setMinWidth(140);
-            jTable2.getColumnModel().getColumn(2).setMaxWidth(150);
+        jScrollPane2.setViewportView(tabla2);
+        if (tabla2.getColumnModel().getColumnCount() > 0) {
+            tabla2.getColumnModel().getColumn(0).setMaxWidth(80);
+            tabla2.getColumnModel().getColumn(2).setMinWidth(140);
+            tabla2.getColumnModel().getColumn(2).setMaxWidth(150);
         }
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 32)); // NOI18N
         jLabel2.setText("Historial entradas/salidas eventos");
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Entradas");
+        buttonGroup1.add(rbEntradas);
+        rbEntradas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        rbEntradas.setSelected(true);
+        rbEntradas.setText("Entradas");
+        rbEntradas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbEntradasMouseClicked(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButton2.setText("Salidas");
+        buttonGroup1.add(rbSalidas);
+        rbSalidas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        rbSalidas.setText("Salidas");
+        rbSalidas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbSalidasMouseClicked(evt);
+            }
+        });
 
         jButton1.setText("Salir");
 
         jButton5.setText("Menú Principal");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Volver");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Seleccione para visualizar");
@@ -125,9 +226,9 @@ public class HistorialEvento extends javax.swing.JFrame {
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(439, 439, 439)
-                        .addComponent(jRadioButton1)
+                        .addComponent(rbEntradas)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton2))
+                        .addComponent(rbSalidas))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -157,8 +258,8 @@ public class HistorialEvento extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(rbEntradas)
+                    .addComponent(rbSalidas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -182,6 +283,94 @@ public class HistorialEvento extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void rbEntradasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbEntradasMouseClicked
+        // TODO add your handling code here:
+        cargarTablaEleccion("Entradas");
+    }//GEN-LAST:event_rbEntradasMouseClicked
+
+    private void tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla1MouseClicked
+        // TODO add your handling code here:
+        int idReporte = Integer.parseInt(String.valueOf(model.getValueAt(tabla1.getSelectedRow(), 0)));
+        if (rbEntradas.isSelected()){
+            llenarArticulosEntrada(idReporte);
+        }else {
+            llenarArticulosSalida(idReporte);
+        }
+    }//GEN-LAST:event_tabla1MouseClicked
+
+    private void rbSalidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbSalidasMouseClicked
+        // TODO add your handling code here:
+        cargarTablaEleccion("Salidas");
+    }//GEN-LAST:event_rbSalidasMouseClicked
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        MenuInventario abrir = new MenuInventario();
+        abrir.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        MainForm abrir = new MainForm();
+        abrir.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void llenarArticulosSalida(int recibe){
+        Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("call LlenarProductosSalida("+ recibe +");");
+            rs = ps.executeQuery();
+            model2 = (DefaultTableModel) this.tabla2.getModel();
+            model2.setRowCount(0);
+            Object Datos[] = new Object[3];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+
+                    if (i == 2) {
+                        model2.addRow(Datos);
+                    }
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+
+        }
+    }
+    
+    
+    private void llenarArticulosEntrada(int recibe) {
+        Connection con = null;
+
+        try {
+            con = (Connection) cn.getConexion();
+            ps = con.prepareStatement("call LlenarProductosEntrada("+ recibe +");");
+            rs = ps.executeQuery();
+            model2 = (DefaultTableModel) this.tabla2.getModel();
+            model2.setRowCount(0);
+            Object Datos[] = new Object[3];
+
+            while (rs.next()) {
+                for (int i = 0; i < 3; i++) {
+                    Datos[i] = (rs.getObject(i + 1));
+
+                    if (i == 2) {
+                        model2.addRow(Datos);
+                    }
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -226,11 +415,11 @@ public class HistorialEvento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JRadioButton rbEntradas;
+    private javax.swing.JRadioButton rbSalidas;
+    private javax.swing.JTable tabla1;
+    private javax.swing.JTable tabla2;
     // End of variables declaration//GEN-END:variables
 }

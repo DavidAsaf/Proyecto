@@ -39,7 +39,7 @@ public class entraEvento extends javax.swing.JFrame {
      * Creates new form entraEvento
      */
     public entraEvento() {
-        initComponents();
+        initComponents(); this.setLocationRelativeTo(null);
         llenarCombo();
         model = (DefaultTableModel) tabla1.getModel();
         model2 = (DefaultTableModel) tabla2.getModel();
@@ -279,6 +279,7 @@ public class entraEvento extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
+            idEspera = Integer.parseInt(String.valueOf(model2.getValueAt(tabla2.getSelectedRow(), 0)));
             idEspera = Integer.parseInt(String.valueOf(model2.getValueAt(tabla2.getSelectedRow(), 0)));
             int obtenerCant = Integer.parseInt(String.valueOf(model.getValueAt(idEspera - 1, 2)));
             cantidad = Integer.parseInt(String.valueOf(model2.getValueAt(tabla2.getSelectedRow(), 2)));
