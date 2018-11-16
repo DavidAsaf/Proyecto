@@ -26,8 +26,7 @@ public class Cursos extends javax.swing.JFrame {
     java.sql.Connection con = cn.getConexion();
 
     boolean haySeleccion=false;
-    boolean existeCurso=false;
-    int vacio=0;
+    
 
     /**
      * Creates new form Cursos
@@ -124,6 +123,11 @@ public class Cursos extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -268,14 +272,7 @@ public class Cursos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debe ingresar un curso");
             
         }else{
-             VerificarCurso();
-                if (vacio==0){
-                    JOptionPane.showMessageDialog(null, "Curso ya existe");
-                    limpiar();
-                }else{
-                   // JOptionPane.showMessageDialog(null, "Curso NO existe");
-                
-            
+
             try {
 
                 con = (Connection) cn.getConexion();
@@ -300,8 +297,9 @@ public class Cursos extends javax.swing.JFrame {
             } catch (Exception e) {
                 System.err.println(e);
             }
-        }  
-        } 
+
+        }                 
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
