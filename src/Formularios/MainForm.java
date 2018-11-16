@@ -155,11 +155,11 @@ public class MainForm extends javax.swing.JFrame {
 
         lblNombre.setText("Nombre");
         getContentPane().add(lblNombre);
-        lblNombre.setBounds(932, 0, 93, 75);
+        lblNombre.setBounds(570, 10, 93, 75);
 
         lblRol.setText("Cargo");
         getContentPane().add(lblRol);
-        lblRol.setBounds(1067, 0, 118, 75);
+        lblRol.setBounds(640, 10, 118, 75);
 
         menuUsuario.setText("Usuario");
         jMenuBar3.add(menuUsuario);
@@ -212,7 +212,9 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+         Inscripciones.Inscripcion agregar = new Inscripciones.Inscripcion();
+        agregar.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
